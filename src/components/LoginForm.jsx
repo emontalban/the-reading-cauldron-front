@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api/axiosConfig";
 
-function LoginPage() {
+function LoginForm({title, buttonText, handleSuccessFulAuth, handleUnsuccessFulAuth}) {
   const [formData, setFormData] = useState({
     user_email: "",
     user_password: "",
@@ -39,11 +39,9 @@ function LoginPage() {
   };
 
   return (
-    <main className="page-container">
-      <section className="form-card">
+    <div>
         <h1>Iniciar sesión</h1>
-
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="login-form-wrapper">
           <div className="form-group">
             <label>Email</label>
             <input
@@ -66,7 +64,7 @@ function LoginPage() {
             />
           </div>
 
-          <button type="submit">Entrar</button>
+          <button className="btn" type="submit">Entrar</button>
         </form>
 
         {message && <p className="message">{message}</p>}
@@ -76,9 +74,9 @@ function LoginPage() {
             <strong>Token guardado correctamente</strong>
           </div>
         )}
-      </section>
-    </main>
+      
+    </div>
   );
 }
 
-export default LoginPage;
+export default LoginForm;

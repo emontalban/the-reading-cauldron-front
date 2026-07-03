@@ -1,0 +1,16 @@
+@use "./variables" as *;
+
+body {
+    margin: 0px;
+    font-family: $font-body;
+}
+
+h1,
+h2,
+h3 {
+    font-family: $font-title;
+}
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
