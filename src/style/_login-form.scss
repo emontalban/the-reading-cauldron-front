@@ -37,7 +37,7 @@
             border-right: 0;
             border-left: 0;
             border-bottom: 1px solid $purple;
-            background-color: transparent;
+            background-color:$text-alt;
             transition: 0.5s all ease-in-out;
             margin-bottom: 21px;
 
@@ -47,7 +47,7 @@
             }
 
             &::placeholder {
-            color: $text-muted;
+            
           }
 
         }
