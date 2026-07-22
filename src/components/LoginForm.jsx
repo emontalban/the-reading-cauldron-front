@@ -30,6 +30,9 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
         localStorage.setItem("token", response.data.token);
 
         setMessage("Login correcto");
+        
+        handleSuccessFulAuth();
+
         } catch (error) {
             if (error.response) {
                 setMessage(error.response.data.message);
@@ -46,7 +49,7 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
     return (
       <div className="login-form-container">
           <h1>Iniciar sesión</h1>
-          <form onSubmit={handleSubmit} className="login-form-wrapper">
+          <form onSubmit={handleSubmit} className="login-form-wrapper" autoComplete="off">
             <div className="form-group">
             <FaEnvelope />
                 <input
@@ -55,6 +58,7 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
                     value={formData.user_email}
                     onChange={handleChange}
                     placeholder="Introduce tu email"
+                    autoComplete="off"
                 />
             </div>
 
@@ -66,6 +70,7 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
                     value={formData.user_password}
                     onChange={handleChange}
                     placeholder="Introduce tu contraseña"
+                    autoComplete="new-password"
                 />
             </div>
 

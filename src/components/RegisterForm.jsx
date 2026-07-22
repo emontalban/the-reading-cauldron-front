@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 import api from "../api/axiosConfig";
 
 function RegisterForm(){
+    const navigate = useNavigate();
     const[formData, setFormData] = useState({
         user_name: "",
         user_email: "",
         user_password: "",
     });
+
+    
 
     const[message, setMessage] = useState("");
 
@@ -19,6 +23,8 @@ function RegisterForm(){
             ...formData,
             [name] : value,
         });
+
+        setMessage("");
     };
 
     const handleSubmit = async(event)=> {
@@ -27,17 +33,21 @@ function RegisterForm(){
         try{
             const response = await api.post("/users", formData);
 
+            setMessage(response.data.message);
+
             setFormData({
                 user_name: "",
                 user_email: "",
-                user_password : ","
+                user_password : ""
             });
+
+            navigate("/login");
         }catch(error){
-    
+                console.log(error);
             if(error.response){
                 setMessage(error.response.data.message)
             }else{
-                setMessage("Error conectando con el  servidor")
+                setMessage("Error conectando con el servidor")
             }
         }
     };

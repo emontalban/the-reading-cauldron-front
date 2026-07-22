@@ -7,7 +7,7 @@ function LoginPage(){
     const navigate = useNavigate();
 
     const handleSuccessFulAuth = () => {
-        navigate("/books");
+        navigate("/");
     }
 
     const handleUnsuccessFulAuth = () => {

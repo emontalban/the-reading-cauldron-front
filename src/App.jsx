@@ -1,6 +1,9 @@
 import { BrowserRouter, Route, Routes, Link } from "react-router"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
+import HomePage from "./pages/HomePage"
+
+
 function App(){
     return(
         
@@ -12,7 +15,7 @@ function App(){
                 <Link to="/register">Registro</Link>
             </nav>
             <Routes>
-                <Route path="/" element={<h1>Bienvenido a The Reading Cauldrom</h1>}></Route>
+                <Route path="/" element={<HomePage />}></Route>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/register" element={<RegisterPage />} />
             </Routes>
