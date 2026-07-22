@@ -18,16 +18,14 @@ function LoginPage(){
     return(
        <div className="login-page-wrapper">
       <div
-        className="login-page-left-column"
+        className="login-page-image-column"
         style={{
           backgroundImage: `url(${loginImg})`,
         }}
       />
 
-      <div className="login-page-right-column">
+      <div className="login-page-form-column">
         <LoginForm
-          title="Iniciar sesión"
-          buttonText="Entrar"
           handleSuccessFulAuth={handleSuccessFulAuth}
           handleUnsuccessFulAuth={handleUnsuccessFulAuth}
         />

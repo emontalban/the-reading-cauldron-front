@@ -1,0 +1,21 @@
+@use "./variables" as *; 
+
+@mixin base-btn {
+    cursor: pointer;
+    height: 42px;
+    font-size: 1em;
+    font-weight: 500;
+    border: 1px solid transparent;
+    transition: all 0.5s ease-in-out;
+    background-color: $purple-dark;
+    color: white;
+
+    &:active,
+    &:focus {
+        outline: none;
+    }
+
+    &:hover {
+        background-color: $purple;
+    }
+}

@@ -10,6 +10,12 @@ h2,
 h3 {
     font-family: $font-title;
 }
+input,
+button,
+textarea,
+select {
+ font-family: inherit;
+}
 .container {
   display: grid;
   grid-template-columns: 1fr;
