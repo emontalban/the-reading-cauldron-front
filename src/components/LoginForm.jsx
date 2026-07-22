@@ -72,7 +72,7 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
             <button className="btn" type="submit">Entrar</button>
           </form>
 
-          {message && <p className="message">{message}</p>}
+          <p className="message">{message}</p>
 
           {token && (
             <div className="token-box">
