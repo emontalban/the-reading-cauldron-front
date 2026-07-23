@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { BrowserRouter, Route, Routes, Link } from "react-router"
 
-import Navbar from "./components/NavBar"
+import NavBar from "./components/NavBar"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import HomePage from "./pages/HomePage"
+import SearchBooksPage from "./pages/SearchBooksPage";
 
 
 function App(){
@@ -24,7 +25,7 @@ function App(){
     return(
         
         <BrowserRouter>
-            <Navbar 
+            <NavBar 
                 isAuthenticated={isAuthenticated}
                 handleLogout={handleLogout}
                 />
@@ -33,6 +34,7 @@ function App(){
                 <Route path="/" element={<HomePage />}></Route>
                 <Route path="/login" element={<LoginPage handleSuccessfulLogin={handleSuccessfulLogin}/>}/>
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/search" element={<SearchBooksPage />} />
             </Routes>
             
         </BrowserRouter>

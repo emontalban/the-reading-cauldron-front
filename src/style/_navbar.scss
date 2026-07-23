@@ -49,7 +49,50 @@
                 color: $gold-hover;
             }
         }
+
     }
+    .navigation-search {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        input {
+            width: 220px;
+            padding: 8px 12px;
+            border: 1px solid $gold;
+            border-radius: 6px;
+            background-color: $background;
+            color: $text;
+            font-family: inherit;
+
+            &::placeholder {
+                color: $purple-light;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: $gold-hover;
+            }
+        }
+
+        button {
+            cursor: pointer;
+            padding: 8px 14px;
+            border: 1px solid $gold;
+            border-radius: 6px;
+            background-color: transparent;
+            color: $gold;
+            font-family: inherit;
+            transition: 0.3s ease-in-out;
+
+            &:hover {
+                color: $gold-hover;
+                border-color: $gold-hover;
+            }
+        }
+
+    }
+
 
     @media (max-width: 768px) {
         height: auto;
