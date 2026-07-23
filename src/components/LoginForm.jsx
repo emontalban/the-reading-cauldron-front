@@ -34,14 +34,16 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
         handleSuccessFulAuth();
 
         } catch (error) {
+
+            console.log(error);
             if (error.response) {
                 setMessage(error.response.data.message);
             } else {
                 setMessage("Error conectando con el servidor");
             }
-            if(handleUnsuccessFulAuth){
+    
                 handleUnsuccessFulAuth();
-            }
+            
 
         }
     };

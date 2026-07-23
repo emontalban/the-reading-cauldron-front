@@ -1,0 +1,66 @@
+@use "./variables" as *;
+@use "./mixins" as *;
+
+.navigation-wrapper {
+    height: 97px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 42px;
+    background-color: $purple-dark;
+
+   .navigation-brand {
+        a {
+            display: flex;
+            align-items: center;
+        }
+
+        img {
+            height: 80px;
+            width: auto;
+            display: block;
+        }
+    }
+    .navigation-links {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        a {
+            color: $gold;
+            text-decoration: none;
+            transition: 0.3s ease-in-out;
+
+            &:hover {
+                color: $gold-hover;
+            }
+        }
+
+        .logout-button {
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            color: $gold;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: 0.3s ease-in-out;
+
+            &:hover {
+                color: $gold-hover;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        height: auto;
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px;
+
+        .navigation-links {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+    }
+}

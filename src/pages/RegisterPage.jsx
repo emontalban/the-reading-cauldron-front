@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import RegisterForm from "../components/RegisterForm";
-import registerImg from "../assets/images/login-image.png"
+import registerImg from "../assets/images/register-imagen.png"
 
 function RegisterPage(){
     return(

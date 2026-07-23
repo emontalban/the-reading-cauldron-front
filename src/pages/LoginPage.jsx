@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/LoginForm";
 import loginImg from "../assets/images/login-image.png"
 
-function LoginPage(){
+function LoginPage({handleSuccessfulLogin}){
     const navigate = useNavigate();
 
     const handleSuccessFulAuth = () => {
+      handleSuccessfulLogin();
         navigate("/");
     }
 
