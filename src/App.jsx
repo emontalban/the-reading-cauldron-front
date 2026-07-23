@@ -6,6 +6,8 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import HomePage from "./pages/HomePage"
 import SearchBooksPage from "./pages/SearchBooksPage";
+import LibraryPage from "./pages/LibraryPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App(){
@@ -35,6 +37,14 @@ function App(){
                 <Route path="/login" element={<LoginPage handleSuccessfulLogin={handleSuccessfulLogin}/>}/>
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/search" element={<SearchBooksPage />} />
+                <Route
+                    path="/library"
+                    element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                        <LibraryPage />
+                        </ProtectedRoute>
+                    }
+                    />
             </Routes>
             
         </BrowserRouter>
