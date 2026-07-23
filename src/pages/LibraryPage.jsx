@@ -35,25 +35,25 @@ function LibraryPage() {
   }, []);
 
   return (
-    <main className="library-page-wrapper">
-      <section className="library-header">
+    <div className="library-page-wrapper">
+      <div className="library-header">
         <h1>Mi biblioteca</h1>
 
         <p>
           Aquí aparecen los libros que has guardado en tu biblioteca personal.
         </p>
-      </section>
+      </div>
 
       {message && <p className="library-message">{message}</p>}
 
       {isLoading ? (
         <p>Cargando biblioteca...</p>
       ) : (
-        <section className="library-books-grid">
+        <div className="library-books-grid">
           {libraryBooks.length > 0 ? (
             libraryBooks.map((book) => {
               return (
-                <article className="library-book-card" key={book.library_id}>
+                <div className="library-book-card" key={book.library_id}>
                   <div className="library-book-cover">
                     {book.book_cover_url ? (
                       <img src={book.book_cover_url} alt={book.book_title} />
@@ -97,15 +97,15 @@ function LibraryPage() {
                         </p>
                       )}
                   </div>
-                </article>
+                </div>
               );
             })
           ) : (
             <p>Todavía no tienes libros guardados.</p>
           )}
-        </section>
+        </div>
       )}
-    </main>
+    </div>
   );
 }
 

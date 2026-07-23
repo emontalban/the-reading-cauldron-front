@@ -49,8 +49,8 @@ function SearchBooksPage() {
   }, [query, books]);
 
   return (
-    <main className="search-books-page-wrapper">
-      <section className="search-books-header">
+    <div className="search-books-page-wrapper">
+      <div className="search-books-header">
         <h1>Libros</h1>
 
         {query ? (
@@ -60,12 +60,12 @@ function SearchBooksPage() {
         ) : (
           <p>Estos son los libros guardados en la base de datos.</p>
         )}
-      </section>
+      </div>
 
       {isLoading ? (
         <p>Cargando libros...</p>
       ) : (
-        <section className="books-grid">
+        <div className="books-grid">
           {filteredBooks.length > 0 ? (
             filteredBooks.map((book) => {
               return (
@@ -99,9 +99,9 @@ function SearchBooksPage() {
           ) : (
             <p>No se encontraron libros.</p>
           )}
-        </section>
+        </div>
       )}
-    </main>
+    </div>
   );
 }
 

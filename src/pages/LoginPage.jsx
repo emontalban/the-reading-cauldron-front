@@ -4,35 +4,35 @@ import LoginForm from "../components/LoginForm";
 import loginImg from "../assets/images/login-image.png"
 
 function LoginPage({handleSuccessfulLogin}){
-    const navigate = useNavigate();
+        const navigate = useNavigate();
 
-    const handleSuccessFulAuth = () => {
-      handleSuccessfulLogin();
-        navigate("/");
-    }
+        const handleSuccessFulAuth = () => {
+        handleSuccessfulLogin();
+            navigate("/");
+        }
 
-    const handleUnsuccessFulAuth = () => {
-        console.log("Login Incorrecto");
-    };
-    
+        const handleUnsuccessFulAuth = () => {
+            console.log("Login Incorrecto");
+        };
+        
 
-    return(
-       <div className="login-page-wrapper">
-      <div
-        className="login-page-image-column"
-        style={{
-          backgroundImage: `url(${loginImg})`,
-        }}
-      />
-
-      <div className="login-page-form-column">
-        <LoginForm
-          handleSuccessFulAuth={handleSuccessFulAuth}
-          handleUnsuccessFulAuth={handleUnsuccessFulAuth}
+        return(
+        <div className="login-page-wrapper">
+        <div
+            className="login-page-image-column"
+            style={{
+            backgroundImage: `url(${loginImg})`,
+            }}
         />
-      </div>
-    </div>
-  );
+
+        <div className="login-page-form-column">
+            <LoginForm
+            handleSuccessFulAuth={handleSuccessFulAuth}
+            handleUnsuccessFulAuth={handleUnsuccessFulAuth}
+            />
+        </div>
+        </div>
+    );
 }
 
 export default LoginPage; 

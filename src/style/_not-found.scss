@@ -1,0 +1,53 @@
+@use "./variables" as *;
+
+.not-found-wrapper {
+    min-height: calc(100vh - 97px);
+    background-color: $background;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    .not-found-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+    }
+
+    .not-found-img {
+        width: min(520px, 90vw);
+        
+        height: auto;
+        display: block;
+        border-radius: 14px;
+        object-fit: contain;
+    }
+
+    .not-found-link {
+        display: inline-block;
+        padding: 12px 22px;
+        border-radius: 6px;
+        background-color: $purple-dark;
+        border: 1px solid $gold;
+        color: $gold;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.3s ease-in-out;
+
+        &:hover {
+           
+       
+            color: $gold-hover;
+        
+        }
+    }
+
+    @media (max-width: 600px) {
+       
+
+        .not-found-image {
+            width: 100%;
+        }
+    }
+}

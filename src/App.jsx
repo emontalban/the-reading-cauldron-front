@@ -8,6 +8,8 @@ import HomePage from "./pages/HomePage"
 import SearchBooksPage from "./pages/SearchBooksPage";
 import LibraryPage from "./pages/LibraryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NoFoundPage from "./pages/NoFoundPage"
+
 
 
 function App(){
@@ -45,6 +47,7 @@ function App(){
                         </ProtectedRoute>
                     }
                     />
+                <Route path="*" element={<NoFoundPage/>}/>
             </Routes>
             
         </BrowserRouter>
