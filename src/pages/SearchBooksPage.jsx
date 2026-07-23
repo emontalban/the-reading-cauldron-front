@@ -4,77 +4,105 @@ import { useSearchParams } from "react-router-dom";
 import api from "../api/axiosConfig";
 
 function SearchBooksPage() {
-    const [books, setBooks] = useState([]);
-    const [filteredBooks, setFilteredBooks] = useState([]);
-    const [searchParams] = useSearchParams();
+  const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const query = searchParams.get("q") || "";
+  const [searchParams] = useSearchParams();
 
-    useEffect(() => {
-        api
-        .get("/books")
-        .then((response) => {
-            console.log(response.data)
-            setBooks(Array.isArray(response.data) ? response.data : []);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }, []);
+  const query = searchParams.get("q") || "";
 
-    useEffect(() => {
-        if (!query) {
-        setFilteredBooks(books);
-        return;
-        }
+  useEffect(() => {
+    api
+      .get("/books")
+      .then((response) => {
+        const booksData = Array.isArray(response.data) ? response.data : [];
 
-        const normalizedQuery = query.toLowerCase();
+        setBooks(booksData);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
 
-        const results = books.filter((book) => {
-        return (
-            book.book_title?.toLowerCase().includes(normalizedQuery) ||
-            book.book_author?.toLowerCase().includes(normalizedQuery) ||
-            book.book_category?.toLowerCase().includes(normalizedQuery)
-        );
-        });
+        setBooks([]);
+        setIsLoading(false);
+      });
+  }, []);
 
-        setFilteredBooks(results);
-    }, [query, books]);
+  useEffect(() => {
+    if (!query) {
+      setFilteredBooks(books);
+      return;
+    }
 
-    return (
-        <main className="search-books-page-wrapper">
-        <section className="search-books-header">
-            <h1>Libros</h1>
+    const normalizedQuery = query.toLowerCase();
 
-            {query ? (
-            <p>
-                Resultados para: <strong>{query}</strong>
-            </p>
-            ) : (
-            <p>Estos son los libros guardados en la base de datos.</p>
-            )}
-        </section>
+    const results = books.filter((book) => {
+      return (
+        book.book_title?.toLowerCase().includes(normalizedQuery) ||
+        book.book_author?.toLowerCase().includes(normalizedQuery) ||
+        book.book_category?.toLowerCase().includes(normalizedQuery)
+      );
+    });
 
+    setFilteredBooks(results);
+  }, [query, books]);
+
+  return (
+    <main className="search-books-page-wrapper">
+      <section className="search-books-header">
+        <h1>Libros</h1>
+
+        {query ? (
+          <p>
+            Resultados para: <strong>{query}</strong>
+          </p>
+        ) : (
+          <p>Estos son los libros guardados en la base de datos.</p>
+        )}
+      </section>
+
+      {isLoading ? (
+        <p>Cargando libros...</p>
+      ) : (
         <section className="books-grid">
-            {filteredBooks.length > 0 ? (
+          {filteredBooks.length > 0 ? (
             filteredBooks.map((book) => {
-                return (
+              return (
                 <article className="book-card" key={book.book_id}>
+                  <div className="book-cover">
+                    {book.book_cover_url ? (
+                      <img src={book.book_cover_url} alt={book.book_title} />
+                    ) : (
+                      <span>Sin portada</span>
+                    )}
+                  </div>
+
+                  <div className="book-info">
                     <h2>{book.book_title}</h2>
-                    <p>{book.book_author}</p>
+
+                    <p className="book-author">{book.book_author}</p>
 
                     {book.book_category && (
-                    <span>{book.book_category}</span>
+                      <p className="book-category">{book.book_category}</p>
                     )}
+
+                    {book.book_description && (
+                      <p className="book-description">
+                        {book.book_description}
+                      </p>
+                    )}
+                  </div>
                 </article>
-                );
+              );
             })
-            ) : (
+          ) : (
             <p>No se encontraron libros.</p>
-            )}
+          )}
         </section>
-        </main>
-    );
+      )}
+    </main>
+  );
 }
 
 export default SearchBooksPage;
