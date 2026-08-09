@@ -11,7 +11,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
   const [message, setMessage] = useState("");
 
   const [searchParams] = useSearchParams();
-   const navigate = useNavigate();
+  
 
   const query = searchParams.get("q") || "";
 
