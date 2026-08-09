@@ -38,7 +38,10 @@ function App(){
                 <Route path="/" element={<HomePage />}></Route>
                 <Route path="/login" element={<LoginPage handleSuccessfulLogin={handleSuccessfulLogin}/>}/>
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/search" element={<SearchBooksPage />} />
+                
+                <Route 
+                    path="/search" 
+                    element={<SearchBooksPage isAuthenticated={isAuthenticated} handleLogout={handleLogout}/>} />
                 <Route
                     path="/library"
                     element={
