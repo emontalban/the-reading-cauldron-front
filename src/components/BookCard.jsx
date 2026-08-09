@@ -10,21 +10,23 @@ function BookCard({ book }) {
   const author = book.author_name?.[0] || "Autor desconocido";
 
   return (
-    <div className="home-book-card">
-      <div className="home-book-cover">
+    <div className="book-card book-card-small">
+      <div className="book-cover">
         {coverUrl ? (
           <img src={coverUrl} alt={book.title} />
         ) : (
-          <span>Sin portada</span>
+          <div className="book-cover-placeholder">
+            <span>Sin imagen</span>
+          </div>
         )}
       </div>
 
-      <div className="home-book-info">
-        <h3>{book.title}</h3>
-        <p>{author}</p>
+      <div className="book-info">
+        <h3 className="book-title">{book.title}</h3>
+        <p className="book-author">{author}</p>
 
         {book.first_publish_year && (
-          <span>{book.first_publish_year}</span>
+          <span className="book-meta">{book.first_publish_year}</span>
         )}
       </div>
     </div>

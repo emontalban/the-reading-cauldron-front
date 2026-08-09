@@ -9,24 +9,32 @@ function BookSection({ title, description, query, sort }) {
 
   useEffect(() => {
     const getBooks = async () => {
-      try {
+      try { 
+        setIsLoading(true);
+        const params = {
+            q: query,
+            sort: sort,
+            limit: 40,
+            fields: "key,title,author_name,cover_i,first_publish_year",
+
+        } 
+        if(sort){
+            params.sort = sort;
+        }
         const response = await axios.get(
-          "https://openlibrary.org/search.json",
-          {
-            params: {
-              q: query,
-              sort: sort,
-              limit: 8,
-              fields: "key,title,author_name,cover_i,first_publish_year",
-            },
-          }
+            "https://openlibrary.org/search.json", {params}
+
         );
 
         const booksData = Array.isArray(response.data.docs)
-          ? response.data.docs
-          : [];
+            ? response.data.docs
+            : [];
 
-        setBooks(booksData);
+        const cleanBooks = booksData.filter((book) => {
+            return book.title && book.cover_i;
+        });
+
+        setBooks(cleanBooks.slice(0, 12));
       } catch (error) {
         console.log(error);
         setBooks([]);
@@ -49,9 +57,14 @@ function BookSection({ title, description, query, sort }) {
         <p>Cargando libros...</p>
       ) : (
         <div className="home-books-grid">
-          {books.map((book) => {
-            return <BookCard key={book.key} book={book} />;
-          })}
+            {books.length > 0 
+            ? (
+                books.map((book) => {
+                    return <BookCard key={book.key} book={book} />;
+            }))
+            :(
+                <p>No se encontraron libros para esta sección.</p>
+            )}
         </div>
       )}
     </div>
