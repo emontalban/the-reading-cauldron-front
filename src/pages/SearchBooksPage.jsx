@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import api from "../api/axiosConfig";
+import axios from "axios";
+
+import BookCard from "../components/BookCard";
 
 function SearchBooksPage() {
   const [books, setBooks] = useState([]);
@@ -11,80 +13,58 @@ function SearchBooksPage() {
 
   const query = searchParams.get("q") || "";
 
-  const normalizedQuery = query.trim();
-  const visibleBooks = normalizedQuery ? books : [];
-  const visibleMessage = normalizedQuery
-    ? message
-    : "Busca un libro desde el buscador de la barra superior.";
-
-
   useEffect(() => {
-    if (!normalizedQuery) {
-       return;
+    if (!query) {
+      setBooks([]);
+      setMessage("Busca un libro desde el buscador de la barra superior.");
+      return;
     }
 
-    const controller = new AbortController();
-
     const getBooks = async () => {
+      try {
         setIsLoading(true);
         setMessage("");
 
-      try {
-        const response = await api.get("/google-books", {
+        const response = await axios.get(
+          "https://openlibrary.org/search.json",
+          {
             params: {
-                q: normalizedQuery,
+              q: query,
+              limit: 24,
+              fields: "key,title,author_name,cover_i,first_publish_year",
             },
-            signal: controller.signal,
-        });
+          }
+        );
 
-        const results = Array.isArray(response.data.books)
-          ? response.data.books
+        const booksData = Array.isArray(response.data.docs)
+          ? response.data.docs
           : [];
 
-        setBooks(results);
+        const cleanBooks = booksData.filter((book) => {
+          return book.title;
+        });
 
-        setMessage(
-            results.length === 0
-            ? "No se encontraron libros."
-            : ""
-        );
+        setBooks(cleanBooks);
 
-      } catch (error) {
-    
-        if (
-            error.code === "ERR_CANCELED" ||
-            controller.signal.aborted
-        ) {
-            return;
+        if (cleanBooks.length === 0) {
+          setMessage("No se encontraron libros.");
         }
-
-        console.error("Error buscando libros:", error);
+      } catch (error) {
+        console.log(error);
 
         setBooks([]);
-        setMessage(
-             error.response?.data?.message ||
-            "No se pudo conectar con Google Books.",
-        );
+        setMessage("No se pudo conectar con Open Library.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-     
-        } finally {
-                if (!controller.signal.aborted) {
-                    setIsLoading(false);
-                }
-            }
-        };
-
-        getBooks();
-
-        
-        return () => {
-            controller.abort();
-        };
-        }, [normalizedQuery]);
+    getBooks();
+  }, [query]);
 
   return (
-    <div className="search-books-page-wrapper">
-      <div className="search-books-header">
+    <main className="search-books-page-wrapper">
+      <section className="search-books-header">
         <h1>Resultados de búsqueda</h1>
 
         {query && (
@@ -94,64 +74,24 @@ function SearchBooksPage() {
         )}
 
         {message && <p className="search-message">{message}</p>}
-      </div>
+      </section>
 
       {isLoading ? (
         <p>Cargando libros...</p>
       ) : (
-        <div className="books-grid">
-          {visibleBooks.map((book) => {
-                const volumeInfo = book.volumeInfo || {};
-
-                const title = volumeInfo.title || "Título no disponible";
-                const authors =
-                volumeInfo.authors?.join(", ") || "Autor no disponible";
-                const category = volumeInfo.categories?.[0] || "";
-                const publishedDate = volumeInfo.publishedDate || "";
-                const description = volumeInfo.description || "";
-                const coverUrl = volumeInfo.imageLinks?.thumbnail || null;
-
-                return (
-                <div className="book-card" key={book.id}>
-                    <div className="book-cover">
-                    {coverUrl ? (
-                        <img src={coverUrl} alt={title} />
-                    ) : (
-                        <span>Sin portada</span>
-                    )}
-                    </div>
-
-                    <div className="book-info">
-                    <h2>{title}</h2>
-
-                    <p className="book-author">{authors}</p>
-
-                    {publishedDate && (
-                        <p className="book-year">Publicado: {publishedDate}</p>
-                    )}
-
-                    {category && <p className="book-category">{category}</p>}
-
-                    {description && (
-                        <p className="book-description">
-                        {description.length > 180
-                            ? `${description.slice(0, 180)}...`
-                            : description}
-                        </p>
-                    )}
-
-                    <div className="book-actions">
-                        <button className="save-book-button" type="button">
-                        Guardar en mi biblioteca
-                        </button>
-                    </div>
-                </div>
-              </div>
+        <section className="search-books-grid">
+          {books.map((book) => {
+            return (
+              <BookCard key={book.key} book={book}>
+                <button className="save-book-button" type="button">
+                  Guardar en mi biblioteca
+                </button>
+              </BookCard>
             );
           })}
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 }
 

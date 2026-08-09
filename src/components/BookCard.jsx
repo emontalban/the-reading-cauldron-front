@@ -1,4 +1,4 @@
-function BookCard({ book }) {
+function BookCard({ book, children }) {
   if (!book) {
     return null;
   }
@@ -28,6 +28,8 @@ function BookCard({ book }) {
         {book.first_publish_year && (
           <span className="book-meta">{book.first_publish_year}</span>
         )}
+
+        {children && <div className="book-actions">{children}</div>}
       </div>
     </div>
   );
