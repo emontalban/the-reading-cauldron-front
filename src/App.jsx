@@ -46,7 +46,7 @@ function App(){
                     path="/library"
                     element={
                         <ProtectedRoute isAuthenticated={isAuthenticated}>
-                        <LibraryPage />
+                        <LibraryPage handleLogout={handleLogout}/>
                         </ProtectedRoute>
                     }
                     />
