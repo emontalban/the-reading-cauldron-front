@@ -118,15 +118,25 @@ function LibraryPage({handleLogout}) {
         }
     
         const updatePayload = {
-            library_status: book.library_status,
-            library_format: book.library_format,
-            library_rating: book.library_rating,
-            library_current_page: book.library_current_page,
-            library_notes: book.library_notes,
-            library_favorite: book.library_favorite,
-            library_ownership: book.library_ownership,
-            library_start_date: book.library_start_date || null,
-            library_finish_date: book.library_finish_date || null,
+            library_status: book.library_status || "pendiente",
+            library_format: book.library_format || "papel",
+            library_rating: 
+                book.library_rating === "" || book.library_rating == null
+                ? null
+                : Number(book.library_rating),
+            library_current_page: 
+                book.library_current_page === "" || book.library_current_page == null
+                ? 0
+                : Number(book.library_current_page),
+            library_notes: book.library_notes || null,
+            library_favorite: Boolean(book.library_favorite),
+            library_ownership: book.library_ownership || "propio",
+            library_start_date: book.library_start_date 
+                ? String(book.library_start_date).slice(0, 10)
+                : null,
+            library_finish_date: book.library_finish_date
+                ? String(book.library_finish_date).slice(0, 10)
+                : null,
         };
         try{
             await api.put(`/library/${book.library_id}`, updatePayload,{
@@ -143,10 +153,20 @@ function LibraryPage({handleLogout}) {
                 handleLogout();
                 navigate("/login")
             }else {
-                setMessage("No se puedieron guardar los cambios.");
+                setMessage(
+                    error.response?.data?.message ||
+                    "No se puedieron guardar los cambios.");
+                console.log("Respuesta backend:", error.response?.data);
             }
         }
     }
+    const formatDateForInput = (dateValue) => {
+        if (!dateValue) {
+            return "";
+        }
+
+        return String(dateValue).slice(0, 10);
+        };
      return (
         <div className="library-page-wrapper">
         <div className="library-header">
@@ -287,7 +307,7 @@ function LibraryPage({handleLogout}) {
                             Fecha de inicio
                             <input
                             type="date"
-                            value={book.library_start_date || ""}
+                            value={formatDateForInput(book.library_start_date)}
                             onChange={(event) =>
                                 handleLibraryFieldChange(
                                 book.library_id,
@@ -302,7 +322,7 @@ function LibraryPage({handleLogout}) {
                             Fecha de finalización
                             <input
                             type="date"
-                            value={book.library_finish_date || ""}
+                            value={formatDateForInput(book.library_finish_date)}
                             onChange={(event) =>
                                 handleLibraryFieldChange(
                                 book.library_id,
@@ -327,7 +347,7 @@ function LibraryPage({handleLogout}) {
                             >
                             <option value="propio">Propio</option>
                             <option value="prestado">Prestado</option>
-                            <option value="pendiente de comprar">Pendiente de comprar</option>
+                            <option value="no_lo_tengo">Pendiente de comprar</option>
                             </select>
                         </label>
 
