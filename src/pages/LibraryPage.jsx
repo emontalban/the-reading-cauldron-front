@@ -194,15 +194,15 @@ function LibraryPage({handleLogout}) {
       });
 
       setLibraryBooks((currentBooks) => {
-        return currentBooks.map((currentBook) => {
+        return currentBooks.map((book) => {
           if (book.library_id === libraryId) {
             return {
-              ...currentBook,
-              library_favorite: newFavoriteValue,
+              ...book,
+              ...updatePayload,
             };
           }
 
-          return currentBook;
+          return book;
         });
       });
 
@@ -238,7 +238,7 @@ function LibraryPage({handleLogout}) {
             return;
         }
 
-        const newFavoriteValue = !Boolean(book.library_favorite);
+        const newFavoriteValue = !book.library_favorite;
 
         const updatePayload = {
             library_status: book.library_status || "pendiente",
@@ -266,16 +266,16 @@ function LibraryPage({handleLogout}) {
             });
 
             setLibraryBooks((currentBooks) => {
-            return currentBooks.map((book) => {
-                if (book.library_id === book.library_id) {
-                return {
-                    ...book,
-                    ...updatePayload,
-                };
-                }
+                return currentBooks.map((currentBook) => {
+                    if (currentBook.library_id === book.library_id) {
+                    return {
+                        ...currentBook,
+                        library_favorite: newFavoriteValue,
+                    };
+                    }
 
-                return book;
-            });
+                    return currentBook;
+                });
             });
         } catch (error) {
             console.log(error);

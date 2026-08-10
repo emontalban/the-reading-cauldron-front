@@ -172,13 +172,14 @@
         transition: color 0.2s ease, transform 0.2s ease;
 
         &:hover {
-            color: #c62828;
+         
             transform: scale(1.12);
         }
     }
 
-    .library-favorite-icon-active {
+    .library-favorite-button-active {
         color: #c62828;
+       
     }
 
     .library-book-notes {
