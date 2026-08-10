@@ -98,16 +98,6 @@ function LibraryBookEditForm({
             </select>
         </label>
 
-        <label className="library-favorite-label">
-            <input
-            type="checkbox"
-            checked={Boolean(editFormData.library_favorite)}
-            onChange={(event) =>
-                onFieldChange("library_favorite", event.target.checked)
-            }
-            />
-            Favorito
-        </label>
 
         <label>
             Notas

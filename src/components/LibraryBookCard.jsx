@@ -6,6 +6,7 @@ function LibraryBookCard({
     isEditing,
     onEdit,
     onDelete,
+    onToggleFavorite,
     formatDateForInput,
 }) {
     const statusLabels = {
@@ -65,15 +66,25 @@ function LibraryBookCard({
                     <p className="library-book-author">{book.book_author}</p>
                 </div>
 
-                <FontAwesomeIcon
-                    icon={faHeart}
+                <button
                     className={
-                    isFavorite
-                        ? "library-favorite-icon library-favorite-icon-active"
-                        : "library-favorite-icon"
+                        isFavorite
+                        ? "library-favorite-button library-favorite-button-active"
+                        : "library-favorite-button"
                     }
-                    title={isFavorite ? "Favorito" : "No favorito"}
-                />
+                    type="button"
+                    onClick={() =>{
+                        console.log("corazon pulsado", book.library_id); 
+                        onToggleFavorite(book)}}
+                    aria-label={
+                        isFavorite
+                        ? `Quitar ${book.book_title} de favoritos`
+                        : `Marcar ${book.book_title} como favorito`
+                    }
+                    title={isFavorite ? "Quitar de favoritos" : "Marcar como favorito"}
+                    >
+                    <FontAwesomeIcon icon={faHeart} />
+                </button>
                 </div>
 
                 {book.book_category && (

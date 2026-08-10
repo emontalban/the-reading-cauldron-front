@@ -12,6 +12,7 @@ function LibraryPage({handleLogout}) {
     const [message, setMessage] = useState("");
     const [editingLibraryId, setEditingLibraryId] = useState(null);
     const [editFormData, setEditFormData] = useState({});
+    const [modalMessage, setModalMessage] = useState("");
 
     const navigate = useNavigate();
 
@@ -19,8 +20,21 @@ function LibraryPage({handleLogout}) {
         if (!dateValue) {
             return "";
         }
+        if (/^\d{4}-\d{2}-\d{2}$/.test(String(dateValue))) {
+            return dateValue;
+        }
 
-        return String(dateValue).slice(0, 10);
+        const parsedDate = new Date(dateValue);
+
+            if (Number.isNaN(parsedDate.getTime())) {
+                return "";
+            }
+
+            const year = parsedDate.getFullYear();
+            const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+            const day = String(parsedDate.getDate()).padStart(2, "0");
+
+            return `${year}-${month}-${day}`;
         };
 
     useEffect(() => {
@@ -37,9 +51,9 @@ function LibraryPage({handleLogout}) {
             setMessage("");
 
             const response = await api.get("/library", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             console.log("Respuesta de /library:", response.data);
@@ -71,6 +85,8 @@ function LibraryPage({handleLogout}) {
 
         getLibraryBooks();
     }, [navigate]);
+
+
 
     const handleDeleteBook = async(libraryId) =>{
         const token = localStorage.getItem("token");
@@ -111,6 +127,7 @@ function LibraryPage({handleLogout}) {
         console.log("Editando libro:", book.library_id);
 
         setEditingLibraryId(book.library_id);
+        setModalMessage("");
 
         setEditFormData({
         library_status: book.library_status || "pendiente",
@@ -128,6 +145,7 @@ function LibraryPage({handleLogout}) {
     const handleCancelEdit = () => {
         setEditingLibraryId(null);
         setEditFormData({});
+        setModalMessage("");
     };
 
     const handleEditFieldChange = (fieldName, value) => {
@@ -147,7 +165,9 @@ function LibraryPage({handleLogout}) {
       return;
     }
 
-    const updatePayload = {
+    setModalMessage("");
+
+     const updatePayload = {
       library_status: editFormData.library_status || "pendiente",
       library_format: editFormData.library_format || "papel",
       library_rating:
@@ -174,21 +194,26 @@ function LibraryPage({handleLogout}) {
       });
 
       setLibraryBooks((currentBooks) => {
-        return currentBooks.map((book) => {
+        return currentBooks.map((currentBook) => {
           if (book.library_id === libraryId) {
             return {
-              ...book,
-              ...updatePayload,
+              ...currentBook,
+              library_favorite: newFavoriteValue,
             };
           }
 
-          return book;
+          return currentBook;
         });
       });
 
-      setMessage("Cambios guardados correctamente.");
-      setEditingLibraryId(null);
-      setEditFormData({});
+      setModalMessage("Cambios guardados correctamente.");
+
+      setTimeout(() => {
+        setEditingLibraryId(null);
+        setEditFormData({});
+        setModalMessage("");
+        }, 1200);
+      
     } catch (error) {
       console.log(error);
       console.log("Respuesta backend:", error.response?.data);
@@ -198,13 +223,75 @@ function LibraryPage({handleLogout}) {
         handleLogout();
         navigate("/login");
       } else {
-        setMessage(
+        setModalMessage(
           error.response?.data?.message ||
             "No se pudieron guardar los cambios."
         );
       }
     }
   };
+    const handleToggleFavorite = async (book) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
+        const newFavoriteValue = !Boolean(book.library_favorite);
+
+        const updatePayload = {
+            library_status: book.library_status || "pendiente",
+            library_format: book.library_format || "papel",
+            library_rating:
+            book.library_rating === "" || book.library_rating == null
+                ? null
+                : Number(book.library_rating),
+            library_current_page:
+            book.library_current_page === "" || book.library_current_page == null
+                ? 0
+                : Number(book.library_current_page),
+            library_notes: book.library_notes || null,
+            library_favorite: newFavoriteValue,
+            library_ownership: book.library_ownership || "propio",
+            library_start_date: formatDateForInput(book.library_start_date) || null,
+            library_finish_date: formatDateForInput(book.library_finish_date) || null,
+        };
+
+        try {
+            await api.put(`/library/${book.library_id}`, updatePayload, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            });
+
+            setLibraryBooks((currentBooks) => {
+            return currentBooks.map((book) => {
+                if (book.library_id === book.library_id) {
+                return {
+                    ...book,
+                    ...updatePayload,
+                };
+                }
+
+                return book;
+            });
+            });
+        } catch (error) {
+            console.log(error);
+            console.log("Respuesta backend:", error.response?.data);
+
+            if (error.response?.status === 401) {
+            handleLogout();
+            navigate("/login");
+            } else {
+            setMessage(
+                error.response?.data?.message ||
+                "No se pudo actualizar el favorito."
+            );
+            }
+        }
+    };
     
      return (
         <div className="library-page-wrapper">
@@ -232,6 +319,7 @@ function LibraryPage({handleLogout}) {
                                 isEditing={isEditing}
                                 onEdit={handleStartEdit}
                                 onDelete={handleDeleteBook}
+                                onToggleFavorite={handleToggleFavorite}
                                 formatDateForInput={formatDateForInput}
                         />
                         
@@ -251,6 +339,7 @@ function LibraryPage({handleLogout}) {
             }
             editFormData={editFormData}
             onFieldChange={handleEditFieldChange}
+            modalMessage={modalMessage}
             onSave={() => handleUpdateLibraryBook(editingLibraryId)}
             onCancel={handleCancelEdit}
             />

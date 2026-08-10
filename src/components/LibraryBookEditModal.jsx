@@ -7,6 +7,7 @@ function LibraryBookEditModal({
     onFieldChange,
     onSave,
     onCancel,
+    modalMessage,
 }) {
     if (!isOpen) {
         return null;
@@ -32,6 +33,12 @@ function LibraryBookEditModal({
                 ×
             </button>
             </div>
+
+            {modalMessage && (
+                <p className="library-modal-message">
+                    {modalMessage}
+                </p>
+                )}
 
             <LibraryBookEditForm
             editFormData={editFormData}

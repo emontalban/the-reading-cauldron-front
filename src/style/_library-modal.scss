@@ -158,7 +158,17 @@
         background-color: $gold-hover;
     }
 }
+.library-modal-message {
+    margin: 0 0 18px;
+    padding: 10px 14px;
 
+    border-radius: 8px;
+
+    background-color: rgba(201, 168, 106, 0.18);
+    color: $purple-dark;
+
+    font-weight: 700;
+}
 .cancel-library-book-button {
     border: 1px solid rgba(50, 3, 92, 0.25);
 
