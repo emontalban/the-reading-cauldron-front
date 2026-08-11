@@ -6,6 +6,7 @@ import api from "../api/axiosConfig";
 import LibraryBookCard from "../components/LibraryBookCard";
 import LibraryBookEditModal from "../components/LibraryBookEditModal";
 import LibraryFilters from "../components/LibraryFilters";
+import LibraryStats from "../components/LibraryStats";
 
 function LibraryPage({handleLogout}) {
     const [libraryBooks, setLibraryBooks] = useState([]);
@@ -344,14 +345,35 @@ function LibraryPage({handleLogout}) {
         setOwnershipFilter("todos");
         setFavoriteFilter("todos");
     };
+
+    const libraryStats = {
+        total: libraryBooks.length,
+
+        wantToRead: libraryBooks.filter((book) => {
+            return book.library_status === "quiero_leer";
+        }).length,
+
+        reading: libraryBooks.filter((book) => {
+            return book.library_status === "leyendo";
+        }).length,
+
+        finished: libraryBooks.filter((book) => {
+            return book.library_status === "terminado";
+        }).length,
+
+        favorites: libraryBooks.filter((book) => {
+            return isFavoriteValue(book.library_favorite);
+        }).length,
+    };
     
     return (
         <div className="library-page-wrapper">
         <div className="library-header">
             <h1>Mi biblioteca</h1>
         </div>
-
+   
         {message && <p className="library-message">{message}</p>}
+        <LibraryStats stats={libraryStats} />
         <LibraryFilters
             searchFilter={searchFilter}
             statusFilter={statusFilter}
