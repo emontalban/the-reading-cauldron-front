@@ -5,7 +5,7 @@
     margin: 0 auto 28px;
 
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+   grid-template-columns: 2fr repeat(4, minmax(0, 1fr)) auto;
     gap: 14px;
     align-items: end;
 
@@ -27,16 +27,19 @@
         font-weight: 700;
     }
 
-    select {
+    select,
+    input {
         width: 100%;
         min-width: 0;
+        height: 40px;
+        box-sizing: border-box;
 
-        border: 1px solid rgba(50, 3, 92, 0.25);
+        border: 1px solid $purple-dark;
         border-radius: 8px;
 
         padding: 9px 10px;
 
-        background-color: white;
+        background-color: $gold-light;
         color: $text;
 
         font-family: inherit;
@@ -51,20 +54,24 @@
 }
 
 .clear-library-filters-button {
-    border: none;
+    border:1px solid $gold;
     border-radius: 8px;
+    height: 40px;
 
     padding: 10px 14px;
 
-    background-color: $purple;
-    color: $text-alt;
+    background-color: $purple-dark;
+    color: $gold;
 
     cursor: pointer;
     font-family: inherit;
     font-weight: 700;
+     transition: 0.3s ease-in-out;
 
     &:hover {
         background-color: $purple-dark;
+        color: $gold-hover;
+      
     }
 }
 

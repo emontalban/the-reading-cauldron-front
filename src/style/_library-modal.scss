@@ -151,11 +151,13 @@
 .save-library-book-button {
     border: none;
 
-    background-color: $gold;
-    color: $purple-dark;
+    background-color: $purple-dark;
+    color: $gold;
+    transition: 0.3s ease-in-out;
 
     &:hover {
-        background-color: $gold-hover;
+        background-color: $purple-dark;
+        color: $gold-hover;
     }
 }
 .library-modal-message {
@@ -164,19 +166,21 @@
 
     border-radius: 8px;
 
-    background-color: rgba(201, 168, 106, 0.18);
+    background-color: $gold-light;
     color: $purple-dark;
 
     font-weight: 700;
 }
 .cancel-library-book-button {
-    border: 1px solid rgba(50, 3, 92, 0.25);
+    border: 1px solid $gold;
 
-    background-color: transparent;
-    color: $purple-dark;
+    background-color: $purple-dark;
+    color: $gold;
+    transition: 0.3s ease-in-out;
 
     &:hover {
-        background-color: rgba(50, 3, 92, 0.08);
+        background-color: $purple-dark;
+        color: $gold-hover;
     }
 }
 

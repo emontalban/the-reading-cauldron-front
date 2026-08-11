@@ -18,7 +18,7 @@ function LibraryPage({handleLogout}) {
     const [formatFilter, setFormatFilter] = useState("todos");
     const [ownershipFilter, setOwnershipFilter] = useState("todos");
     const [favoriteFilter, setFavoriteFilter] = useState("todos");
-
+    const [searchFilter, setSearchFilter] = useState("");
     const navigate = useNavigate();
 
     const isFavoriteValue = (value) => {
@@ -170,37 +170,37 @@ function LibraryPage({handleLogout}) {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login");
-      return;
+        navigate("/login");
+        return;
     }
 
     setModalMessage("");
 
-     const updatePayload = {
-      library_status: editFormData.library_status || "pendiente",
-      library_format: editFormData.library_format || "papel",
-      library_rating:
-        editFormData.library_rating === "" || editFormData.library_rating == null
-          ? null
-          : Number(editFormData.library_rating),
-      library_current_page:
-        editFormData.library_current_page === "" ||
-        editFormData.library_current_page == null
-          ? 0
-          : Number(editFormData.library_current_page),
-      library_notes: editFormData.library_notes || null,
-      library_favorite: Boolean(editFormData.library_favorite),
-      library_ownership: editFormData.library_ownership || "propio",
-      library_start_date: editFormData.library_start_date || null,
-      library_finish_date: editFormData.library_finish_date || null,
+    const updatePayload = {
+        library_status: editFormData.library_status || "pendiente",
+        library_format: editFormData.library_format || "papel",
+        library_rating:
+            editFormData.library_rating === "" || editFormData.library_rating == null
+            ? null
+            : Number(editFormData.library_rating),
+        library_current_page:
+            editFormData.library_current_page === "" ||
+            editFormData.library_current_page == null
+            ? 0
+            : Number(editFormData.library_current_page),
+        library_notes: editFormData.library_notes || null,
+        library_favorite: Boolean(editFormData.library_favorite),
+        library_ownership: editFormData.library_ownership || "propio",
+        library_start_date: editFormData.library_start_date || null,
+        library_finish_date: editFormData.library_finish_date || null,
     };
 
     try {
-      await api.put(`/library/${libraryId}`, updatePayload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+        await api.put(`/library/${libraryId}`, updatePayload, {
+            headers: {
+            Authorization: `Bearer ${token}`,
+            },
+    });
 
       setLibraryBooks((currentBooks) => {
         return currentBooks.map((book) => {
@@ -224,19 +224,19 @@ function LibraryPage({handleLogout}) {
         }, 1200);
       
     } catch (error) {
-      console.log(error);
-      console.log("Respuesta backend:", error.response?.data);
+        console.log(error);
+        console.log("Respuesta backend:", error.response?.data);
 
-      if (error.response?.status === 401) {
-        setMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.");
-        handleLogout();
-        navigate("/login");
-      } else {
-        setModalMessage(
-          error.response?.data?.message ||
-            "No se pudieron guardar los cambios."
-        );
-      }
+        if (error.response?.status === 401) {
+            setMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.");
+            handleLogout();
+            navigate("/login");
+        } else {
+            setModalMessage(
+            error.response?.data?.message ||
+                "No se pudieron guardar los cambios."
+            );
+        }
     }
   };
     const handleToggleFavorite = async (book) => {
@@ -303,8 +303,17 @@ function LibraryPage({handleLogout}) {
     };
 
     const filteredBooks = libraryBooks.filter((book) => {
+        const normalizedSearch = searchFilter.toLowerCase().trim();
+        
+        const matchesSearch =
+            normalizedSearch === "" ||
+            book.book_title?.toLowerCase().includes(normalizedSearch) ||
+            book.book_author?.toLowerCase().includes(normalizedSearch) ||
+            book.book_category?.toLowerCase().includes(normalizedSearch) ||
+            book.library_notes?.toLowerCase().includes(normalizedSearch);
+        
         const matchesStatus =
-            statusFilter === "todos" || book.library_status === statusFilter;
+        statusFilter === "todos" || book.library_status === statusFilter;
 
         const matchesFormat =
             formatFilter === "todos" || book.library_format === formatFilter;
@@ -321,6 +330,7 @@ function LibraryPage({handleLogout}) {
             (favoriteFilter === "no_favoritos" && !isFavorite);
 
         return (
+            matchesSearch &&
             matchesStatus &&
             matchesFormat &&
             matchesOwnership &&
@@ -328,6 +338,7 @@ function LibraryPage({handleLogout}) {
         );
     });
     const handleClearFilters = () => {
+        setSearchFilter("");
         setStatusFilter("todos");
         setFormatFilter("todos");
         setOwnershipFilter("todos");
@@ -338,23 +349,21 @@ function LibraryPage({handleLogout}) {
         <div className="library-page-wrapper">
         <div className="library-header">
             <h1>Mi biblioteca</h1>
-
-            <p>
-            Aquí aparecen los libros que has guardado en tu biblioteca personal.
-            </p>
         </div>
 
         {message && <p className="library-message">{message}</p>}
         <LibraryFilters
-        statusFilter={statusFilter}
-        formatFilter={formatFilter}
-        ownershipFilter={ownershipFilter}
-        favoriteFilter={favoriteFilter}
-        onStatusChange={setStatusFilter}
-        onFormatChange={setFormatFilter}
-        onOwnershipChange={setOwnershipFilter}
-        onFavoriteChange={setFavoriteFilter}
-        onClearFilters={handleClearFilters}
+            searchFilter={searchFilter}
+            statusFilter={statusFilter}
+            formatFilter={formatFilter}
+            ownershipFilter={ownershipFilter}
+            favoriteFilter={favoriteFilter}
+            onSearchChange={setSearchFilter}
+            onStatusChange={setStatusFilter}
+            onFormatChange={setFormatFilter}
+            onOwnershipChange={setOwnershipFilter}
+            onFavoriteChange={setFavoriteFilter}
+            onClearFilters={handleClearFilters}
         />
         {isLoading ? (
             <p>Cargando biblioteca...</p>

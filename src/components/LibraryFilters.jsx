@@ -1,29 +1,40 @@
 function LibraryFilters({
-  statusFilter,
-  formatFilter,
-  ownershipFilter,
-  favoriteFilter,
-  onStatusChange,
-  onFormatChange,
-  onOwnershipChange,
-  onFavoriteChange,
-  onClearFilters,
+    statusFilter,
+    formatFilter,
+    ownershipFilter,
+    favoriteFilter,
+    searchFilter,
+    onSearchChange,
+    onStatusChange,
+    onFormatChange,
+    onOwnershipChange,
+    onFavoriteChange,
+    onClearFilters,
 }) {
   return (
     <div className="library-filters">
-      <label>
-        Estado
-        <select
-            value={statusFilter}
-            onChange={(event) => onStatusChange(event.target.value)}
-            >
-            <option value="todos">Todos</option>
-            <option value="quiero_leer">Quiero leer</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="leyendo">Leyendo</option>
-            <option value="terminado">Completado</option>
-            <option value="abandonado">Abandonado</option>
-            </select>
+        <label className="library-search-filter">
+            Buscar
+            <input
+            type="text"
+            value={searchFilter}
+            onChange={(event) => onSearchChange(event.target.value)}
+            placeholder="Título, autor, categoría o notas"
+        />
+      </label>
+        <label>
+            Estado
+            <select
+                value={statusFilter}
+                onChange={(event) => onStatusChange(event.target.value)}
+                >
+                <option value="todos">Todos</option>
+                <option value="quiero_leer">Quiero leer</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="leyendo">Leyendo</option>
+                <option value="terminado">Completado</option>
+                <option value="abandonado">Abandonado</option>
+                </select>
         </label>
 
         <label>
@@ -55,22 +66,22 @@ function LibraryFilters({
         <label>
             Favoritos
             <select
-            value={favoriteFilter}
-            onChange={(event) => onFavoriteChange(event.target.value)}
+                value={favoriteFilter}
+                onChange={(event) => onFavoriteChange(event.target.value)}
             >
-            <option value="todos">Todos</option>
-            <option value="favoritos">Solo favoritos</option>
-            <option value="no_favoritos">No favoritos</option>
+                <option value="todos">Todos</option>
+                <option value="favoritos">Solo favoritos</option>
+                <option value="no_favoritos">No favoritos</option>
             </select>
-      </label>
+        </label>
 
-      <button
-        className="clear-library-filters-button"
-        type="button"
-        onClick={onClearFilters}
-      >
-        Limpiar filtros
-      </button>
+        <button
+            className="clear-library-filters-button"
+            type="button"
+            onClick={onClearFilters}
+        >
+            Limpiar filtros
+        </button>
     </div>
   );
 }

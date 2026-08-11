@@ -2,7 +2,7 @@
 
 
 .library-page-wrapper{
-     min-height: calc(100vh - 97px);
+    min-height: calc(100vh - 97px);
     background-color: $background;
     color: $text;
     padding: 42px;
@@ -13,10 +13,7 @@
         h1 {
             margin: 0 0 10px;
             color: $purple-dark;
-        }
-
-        p {
-            margin: 0;
+            text-align: center;
         }
     }
     
@@ -226,7 +223,7 @@
         border-radius: 50%;
 
         background-color: $purple-dark;
-        color: $text-alt;
+        color: $gold;
 
         display: flex;
         align-items: center;
@@ -243,8 +240,8 @@
             background-color 0.2s ease;
 
         &:hover {
-            background-color: $text-alt;
-            color: $purple;
+            background-color: $purple-dark;
+            color: $gold-hover;
             transform: scale(1.08);
         }
     }
