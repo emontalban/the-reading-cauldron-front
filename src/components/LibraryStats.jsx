@@ -1,32 +1,93 @@
-function LibraryStats({ stats }) {
-    return (
-        <div className="library-stats">
-            <div className="library-stat-card">
-                <span>Total</span>
-                <strong>{stats.total}</strong>
-            </div>
+function LibraryStats({
+  stats,
+  ownershipFilter,
+  favoriteFilter,
+  onOwnershipFilterChange,
+  onFavoriteFilterChange,
+}) {
+  return (
+    <div className="library-stats">
+      <button
+        className={
+            ownershipFilter === "todos" && favoriteFilter === "todos"
+                ? "library-stat-card library-stat-card-active"
+                : "library-stat-card"
+            }
+            type="button"
+            onClick={() => {
+            onOwnershipFilterChange("todos");
+            onFavoriteFilterChange("todos");
+            }}
+        >
+            <span>Todos</span>
+            <strong>{stats.total}</strong>
+        </button>
 
-            <div className="library-stat-card">
-                <span>Quiero leer</span>
-                <strong>{stats.wantToRead}</strong>
-            </div>
+        <button
+            className={
+            ownershipFilter === "propio"
+                ? "library-stat-card library-stat-card-active"
+                : "library-stat-card"
+            }
+            type="button"
+            onClick={() => {
+            onOwnershipFilterChange("propio");
+            onFavoriteFilterChange("todos");
+            }}
+        >
+            <span>Propios</span>
+            <strong>{stats.owned}</strong>
+        </button>
 
-            <div className="library-stat-card">
-                <span>Leyendo</span>
-                <strong>{stats.reading}</strong>
-            </div>
+        <button
+            className={
+            ownershipFilter === "prestado"
+                ? "library-stat-card library-stat-card-active"
+                : "library-stat-card"
+            }
+            type="button"
+            onClick={() => {
+            onOwnershipFilterChange("prestado");
+            onFavoriteFilterChange("todos");
+            }}
+        >
+            <span>Prestados</span>
+            <strong>{stats.borrowed}</strong>
+        </button>
 
-            <div className="library-stat-card">
-                <span>Terminados</span>
-                <strong>{stats.finished}</strong>
-            </div>
+        <button
+            className={
+            ownershipFilter === "no_lo_tengo"
+                ? "library-stat-card library-stat-card-active"
+                : "library-stat-card"
+            }
+            type="button"
+            onClick={() => {
+            onOwnershipFilterChange("no_lo_tengo");
+            onFavoriteFilterChange("todos");
+            }}
+        >
+            <span>Pendientes de comprar</span>
+            <strong>{stats.notOwned}</strong>
+        </button>
 
-            <div className="library-stat-card">
-                <span>Favoritos</span>
-                <strong>{stats.favorites}</strong>
-            </div>
-        </div>
-    );
+        <button
+            className={
+            favoriteFilter === "favoritos"
+                ? "library-stat-card library-stat-card-active"
+                : "library-stat-card"
+            }
+            type="button"
+            onClick={() => {
+            onOwnershipFilterChange("todos");
+            onFavoriteFilterChange("favoritos");
+            }}
+        >
+            <span>Favoritos</span>
+            <strong>{stats.favorites}</strong>
+        </button>
+    </div>
+  );
 }
 
 export default LibraryStats;

@@ -20,6 +20,8 @@ function LibraryPage({handleLogout}) {
     const [ownershipFilter, setOwnershipFilter] = useState("todos");
     const [favoriteFilter, setFavoriteFilter] = useState("todos");
     const [searchFilter, setSearchFilter] = useState("");
+
+    const [sortFilter, setSortFilter] = useState("fecha_desc");
     const navigate = useNavigate();
 
     const isFavoriteValue = (value) => {
@@ -327,9 +329,7 @@ function LibraryPage({handleLogout}) {
 
         const matchesFavorite =
             favoriteFilter === "todos" ||
-            (favoriteFilter === "favoritos" && isFavorite) ||
-            (favoriteFilter === "no_favoritos" && !isFavorite);
-
+            (favoriteFilter === "favoritos" && isFavorite) 
         return (
             matchesSearch &&
             matchesStatus &&
@@ -338,32 +338,67 @@ function LibraryPage({handleLogout}) {
             matchesFavorite
         );
     });
+    const sortedBooks = [...filteredBooks].sort((bookA, bookB) => {
+        if (sortFilter === "titulo_asc") {
+            return bookA.book_title.localeCompare(bookB.book_title);
+        }
+
+        if (sortFilter === "autor_asc") {
+            return bookA.book_author.localeCompare(bookB.book_author);
+        }
+
+        if (sortFilter === "valoracion_desc") {
+            return Number(bookB.library_rating || 0) - Number(bookA.library_rating || 0);
+        }
+
+        return Number(bookB.library_id || 0) - Number(bookA.library_id || 0);
+    });
     const handleClearFilters = () => {
         setSearchFilter("");
         setStatusFilter("todos");
         setFormatFilter("todos");
         setOwnershipFilter("todos");
         setFavoriteFilter("todos");
+        setSortFilter("fecha_desc");
     };
 
     const libraryStats = {
         total: libraryBooks.length,
 
-        wantToRead: libraryBooks.filter((book) => {
-            return book.library_status === "quiero_leer";
+        owned: libraryBooks.filter((book) => {
+            return book.library_ownership === "propio";
         }).length,
 
-        reading: libraryBooks.filter((book) => {
-            return book.library_status === "leyendo";
+        borrowed: libraryBooks.filter((book) => {
+            return book.library_ownership === "prestado";
         }).length,
 
-        finished: libraryBooks.filter((book) => {
-            return book.library_status === "terminado";
+        notOwned: libraryBooks.filter((book) => {
+            return book.library_ownership === "no_lo_tengo";
         }).length,
 
         favorites: libraryBooks.filter((book) => {
             return isFavoriteValue(book.library_favorite);
         }).length,
+    };
+    const getActiveLibraryViewLabel = () => {
+        if (favoriteFilter === "favoritos") {
+            return "Favoritos";
+        }
+
+        if (ownershipFilter === "propio") {
+            return "Propios";
+        }
+
+        if (ownershipFilter === "prestado") {
+            return "Prestados";
+        }
+
+        if (ownershipFilter === "no_lo_tengo") {
+            return "Pendientes de comprar";
+        }
+
+        return "Todos";
     };
     
     return (
@@ -373,28 +408,38 @@ function LibraryPage({handleLogout}) {
         </div>
    
         {message && <p className="library-message">{message}</p>}
-        <LibraryStats stats={libraryStats} />
+        <LibraryStats 
+            stats={libraryStats}
+            ownershipFilter={ownershipFilter}
+            favoriteFilter={favoriteFilter}
+            onOwnershipFilterChange={setOwnershipFilter}
+            onFavoriteFilterChange={setFavoriteFilter} />
         <LibraryFilters
             searchFilter={searchFilter}
             statusFilter={statusFilter}
             formatFilter={formatFilter}
-            ownershipFilter={ownershipFilter}
-            favoriteFilter={favoriteFilter}
+            sortFilter={sortFilter}
             onSearchChange={setSearchFilter}
             onStatusChange={setStatusFilter}
             onFormatChange={setFormatFilter}
-            onOwnershipChange={setOwnershipFilter}
-            onFavoriteChange={setFavoriteFilter}
+            onSortChange={setSortFilter}
             onClearFilters={handleClearFilters}
         />
+        <div className="library-results-summary">
+            <p>
+                Mostrando <strong>{sortedBooks.length}</strong> de{" "}
+                <strong>{libraryBooks.length}</strong> libros · Vista:{" "}
+                <strong>{getActiveLibraryViewLabel()}</strong>
+            </p>
+        </div>
         {isLoading ? (
             <p>Cargando biblioteca...</p>
         ) : (
             <div className="library-books-grid">
             {libraryBooks.length === 0 ? (
                 <p>Todavía no tienes libros guardados.</p>
-            ): filteredBooks.length > 0 ?(
-                filteredBooks.map((book) => {
+            ): sortedBooks.length > 0 ?(
+                sortedBooks.map((book) => {
                     const isEditing = editingLibraryId === book.library_id;
                     return (
                         <LibraryBookCard

@@ -1,14 +1,12 @@
 function LibraryFilters({
     statusFilter,
     formatFilter,
-    ownershipFilter,
-    favoriteFilter,
+    sortFilter,
     searchFilter,
     onSearchChange,
     onStatusChange,
     onFormatChange,
-    onOwnershipChange,
-    onFavoriteChange,
+    onSortChange,
     onClearFilters,
 }) {
   return (
@@ -51,29 +49,18 @@ function LibraryFilters({
         </label>
 
         <label>
-            Propiedad
+            Ordenar
             <select
-            value={ownershipFilter}
-            onChange={(event) => onOwnershipChange(event.target.value)}
+                value={sortFilter}
+                onChange={(event) => onSortChange(event.target.value)}
             >
-            <option value="todos">Todos</option>
-            <option value="propio">Propio</option>
-            <option value="prestado">Prestado</option>
-            <option value="no_lo_tengo">Pendiente de comprar</option>
+            <option value="fecha_desc">Más recientes</option>
+            <option value="titulo_asc">Título A-Z</option>
+            <option value="autor_asc">Autor A-Z</option>
+            <option value="valoracion_desc">Mejor valorados</option>
             </select>
-        </label>
+      </label>
 
-        <label>
-            Favoritos
-            <select
-                value={favoriteFilter}
-                onChange={(event) => onFavoriteChange(event.target.value)}
-            >
-                <option value="todos">Todos</option>
-                <option value="favoritos">Solo favoritos</option>
-                <option value="no_favoritos">No favoritos</option>
-            </select>
-        </label>
 
         <button
             className="clear-library-filters-button"
