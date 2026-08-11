@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axiosConfig";
 import LibraryBookCard from "../components/LibraryBookCard";
 import LibraryBookEditModal from "../components/LibraryBookEditModal";
+import LibraryFilters from "../components/LibraryFilters";
 
 function LibraryPage({handleLogout}) {
     const [libraryBooks, setLibraryBooks] = useState([]);
@@ -13,8 +14,16 @@ function LibraryPage({handleLogout}) {
     const [editingLibraryId, setEditingLibraryId] = useState(null);
     const [editFormData, setEditFormData] = useState({});
     const [modalMessage, setModalMessage] = useState("");
+    const [statusFilter, setStatusFilter] = useState("todos");
+    const [formatFilter, setFormatFilter] = useState("todos");
+    const [ownershipFilter, setOwnershipFilter] = useState("todos");
+    const [favoriteFilter, setFavoriteFilter] = useState("todos");
 
     const navigate = useNavigate();
+
+    const isFavoriteValue = (value) => {
+        return value === true || value === 1 || value === "1";
+    };
 
     const formatDateForInput = (dateValue) => {
         if (!dateValue) {
@@ -292,8 +301,40 @@ function LibraryPage({handleLogout}) {
             }
         }
     };
+
+    const filteredBooks = libraryBooks.filter((book) => {
+        const matchesStatus =
+            statusFilter === "todos" || book.library_status === statusFilter;
+
+        const matchesFormat =
+            formatFilter === "todos" || book.library_format === formatFilter;
+
+        const matchesOwnership =
+            ownershipFilter === "todos" ||
+            book.library_ownership === ownershipFilter;
+
+        const isFavorite = isFavoriteValue(book.library_favorite);
+
+        const matchesFavorite =
+            favoriteFilter === "todos" ||
+            (favoriteFilter === "favoritos" && isFavorite) ||
+            (favoriteFilter === "no_favoritos" && !isFavorite);
+
+        return (
+            matchesStatus &&
+            matchesFormat &&
+            matchesOwnership &&
+            matchesFavorite
+        );
+    });
+    const handleClearFilters = () => {
+        setStatusFilter("todos");
+        setFormatFilter("todos");
+        setOwnershipFilter("todos");
+        setFavoriteFilter("todos");
+    };
     
-     return (
+    return (
         <div className="library-page-wrapper">
         <div className="library-header">
             <h1>Mi biblioteca</h1>
@@ -304,30 +345,42 @@ function LibraryPage({handleLogout}) {
         </div>
 
         {message && <p className="library-message">{message}</p>}
-
+        <LibraryFilters
+        statusFilter={statusFilter}
+        formatFilter={formatFilter}
+        ownershipFilter={ownershipFilter}
+        favoriteFilter={favoriteFilter}
+        onStatusChange={setStatusFilter}
+        onFormatChange={setFormatFilter}
+        onOwnershipChange={setOwnershipFilter}
+        onFavoriteChange={setFavoriteFilter}
+        onClearFilters={handleClearFilters}
+        />
         {isLoading ? (
             <p>Cargando biblioteca...</p>
         ) : (
             <div className="library-books-grid">
-            {libraryBooks.length > 0 ? (
-                libraryBooks.map((book) => {
+            {libraryBooks.length === 0 ? (
+                <p>Todavía no tienes libros guardados.</p>
+            ): filteredBooks.length > 0 ?(
+                filteredBooks.map((book) => {
                     const isEditing = editingLibraryId === book.library_id;
                     return (
                         <LibraryBookCard
-                                key={book.library_id}
-                                book={book}
-                                isEditing={isEditing}
-                                onEdit={handleStartEdit}
-                                onDelete={handleDeleteBook}
-                                onToggleFavorite={handleToggleFavorite}
-                                formatDateForInput={formatDateForInput}
+                            key={book.library_id}
+                            book={book}
+                            isEditing={isEditing}
+                            onEdit={handleStartEdit}
+                            onDelete={handleDeleteBook}
+                            onToggleFavorite={handleToggleFavorite}
+                            formatDateForInput={formatDateForInput}
                         />
                         
                     );
                 })
                         
             ) : (
-                <p>Todavía no tienes libros guardados.</p>
+                <p>No hay libros que coincidan con los filtros.</p>
             )}
             </div>
         )}

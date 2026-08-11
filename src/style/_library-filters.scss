@@ -1,0 +1,89 @@
+@use "./variables" as *;
+
+.library-filters {
+    width: min(100%, 940px);
+    margin: 0 auto 28px;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+    gap: 14px;
+    align-items: end;
+
+    background-color: $card-background;
+    border: 1px solid rgba(50, 3, 92, 0.12);
+    border-radius: 14px;
+
+    padding: 18px;
+
+    box-shadow: 0 6px 16px rgba(23, 20, 31, 0.06);
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        color: $purple-dark;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    select {
+        width: 100%;
+        min-width: 0;
+
+        border: 1px solid rgba(50, 3, 92, 0.25);
+        border-radius: 8px;
+
+        padding: 9px 10px;
+
+        background-color: white;
+        color: $text;
+
+        font-family: inherit;
+        font-size: 0.9rem;
+
+        &:focus {
+            outline: none;
+            border-color: $purple;
+            box-shadow: 0 0 0 3px rgba(117, 21, 191, 0.12);
+        }
+    }
+}
+
+.clear-library-filters-button {
+    border: none;
+    border-radius: 8px;
+
+    padding: 10px 14px;
+
+    background-color: $purple;
+    color: $text-alt;
+
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+
+    &:hover {
+        background-color: $purple-dark;
+    }
+}
+
+@media (max-width: 768px) {
+    .library-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .clear-library-filters-button {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .library-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .clear-library-filters-button {
+        width: 100%;
+    }
+}
