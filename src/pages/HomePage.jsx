@@ -36,7 +36,7 @@ function HomePage() {
   ];
 
   return (
-    <main className="home-page-wrapper">
+    <div className="home-page-wrapper">
  
 
       {bookSections.map((section) => {
@@ -50,7 +50,7 @@ function HomePage() {
           />
         );
       })}
-    </main>
+    </div>
   );
 }
 

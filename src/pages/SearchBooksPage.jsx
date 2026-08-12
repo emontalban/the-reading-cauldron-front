@@ -4,11 +4,14 @@ import axios from "axios";
 
 import api from "../api/axiosConfig"
 import BookCard from "../components/BookCard";
+import AppToast from "../components/AppToast";
+import { DiEnvato } from "react-icons/di";
 
 function SearchBooksPage({isAuthenticated, handleLogout}) {
   const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("info");
 
   const [searchParams] = useSearchParams();
   
@@ -18,7 +21,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
   useEffect(() => {
     if (!query) {
       setBooks([]);
-      setMessage("Busca un libro desde el buscador de la barra superior.");
+      showMessage("Busca un libro desde el buscador de la barra superior.");
       return;
     }
 
@@ -56,7 +59,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
             console.log(error);
 
         setBooks([]);
-            setMessage("No se pudo conectar con Open Library.");
+            showMessage("No se pudo conectar con Open Library.");
         } finally {
             setIsLoading(false);
         }
@@ -123,9 +126,9 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
              console.log("Respuesta de /books:", bookResponse.data);
             const bookId = bookResponse.data.book_id;
             if (!bookId) {
-            setMessage("El libro se creó, pero no se recibió el book_id.");
-            return;
-        }
+                setMessage("El libro se creó, pero no se recibió el book_id.");
+                return;
+            }
 
         await api.post(
             "/library",
@@ -141,60 +144,78 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
             }
         );
 
-        setMessage("Libro guardado en tu biblioteca.");
+        showMessage("Libro guardado en tu biblioteca.", "success");
+
+
         } catch (error) {
             console.log(error);
+            console.log("Respuesta backend:", error.response?.data);
             if (error.response?.status === 401){
-                setMessage("Tu sesion ha caducado.Vuelve a iniciar Sesion.");
+                showMessage("Tu sesion ha caducado.Vuelve a iniciar Sesion.");
                 handleLogout();
                 navigate("/login")
             }
             else if (error.response?.status === 409) {
-                setMessage("Este libro ya existe o ya está guardado.");
+                showMessage("Este libro ya existe o ya está guardado.");
             } else if (error.response?.data?.message) {
-                setMessage(error.response.data.message);
+                showMessage(error.response.data.message);
             } else {
-                setMessage("No se pudo guardar el libro.");
+                showMessage("No se pudo guardar el libro.");
             }
         }
-  };
-  return (
-    <main className="search-books-page-wrapper">
-      <section className="search-books-header">
-        <h1>Resultados de búsqueda</h1>
+    };
+    const showMessage = (text, type = "info") => {
+        setMessage(text);
+        setMessageType(type);
 
-        {query && (
-          <p>
-            Resultados para: <strong>{query}</strong>
-          </p>
+        setTimeout(() => {
+            setMessage("");
+            setMessageType("info");
+        }, 3500);
+    };
+
+    return (
+        <div className="search-books-page-wrapper">
+            <AppToast
+                message={message}
+                type={messageType}
+                onClose={() => setMessage("")}
+            />
+            <div className="search-books-header">
+                <h1>Resultados de búsqueda</h1>
+
+                {query && (
+                <p>
+                    Resultados para: <strong>{query}</strong>
+                </p>
+                )}
+
+                {message && <p className="search-message">{message}</p>}
+            </div>
+
+            {isLoading ? (
+                <p>Cargando libros...</p>
+            ) : (
+                <div className="search-books-grid">
+                {books.map((book) => {
+                    return (
+                    <BookCard key={book.key} book={book}>
+                        <button className="save-book-button"
+                            type="button"
+                            onClick={() => {
+                                console.log("Botón pulsado:", book.title);
+                                handleSaveBook(book);
+                            }}
+                            >
+                            Guardar en mi biblioteca
+                        </button>
+                    </BookCard>
+                    );
+                })}
+            </div>
         )}
-
-        {message && <p className="search-message">{message}</p>}
-      </section>
-
-      {isLoading ? (
-        <p>Cargando libros...</p>
-      ) : (
-        <section className="search-books-grid">
-          {books.map((book) => {
-            return (
-              <BookCard key={book.key} book={book}>
-                <button className="save-book-button"
-  type="button"
-  onClick={() => {
-    console.log("Botón pulsado:", book.title);
-    handleSaveBook(book);
-  }}
->
-  Guardar en mi biblioteca
-                </button>
-              </BookCard>
-            );
-          })}
-        </section>
-      )}
-    </main>
-  );
+        </div>
+    );
 }
 
 export default SearchBooksPage;

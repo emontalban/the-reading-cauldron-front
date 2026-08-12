@@ -7,6 +7,7 @@ import LibraryBookCard from "../components/LibraryBookCard";
 import LibraryBookEditModal from "../components/LibraryBookEditModal";
 import LibraryFilters from "../components/LibraryFilters";
 import LibraryStats from "../components/LibraryStats";
+import AppToast from "../components/AppToast";
 
 function LibraryPage({handleLogout}) {
     const [libraryBooks, setLibraryBooks] = useState([]);
@@ -22,6 +23,8 @@ function LibraryPage({handleLogout}) {
     const [searchFilter, setSearchFilter] = useState("");
 
     const [sortFilter, setSortFilter] = useState("fecha_desc");
+    
+    const [messageType, setMessageType] = useState("info");
     const navigate = useNavigate();
 
     const isFavoriteValue = (value) => {
@@ -48,6 +51,16 @@ function LibraryPage({handleLogout}) {
 
             return `${year}-${month}-${day}`;
         };
+
+    const showMessage = (text, type = "info") => {
+        setMessage(text);
+        setMessageType(type);
+
+        setTimeout(() => {
+            setMessage("");
+            setMessageType("info");
+        }, 3500);
+    };
 
     useEffect(() => {
         const getLibraryBooks = async () => {
@@ -88,7 +101,7 @@ function LibraryPage({handleLogout}) {
                 navigate("/login");
             
             } else {
-                setMessage("No se pudo cargar tu biblioteca.");
+                showMessage("No se pudo cargar tu biblioteca.");
             }
         } finally {
             setIsLoading(false);
@@ -120,16 +133,16 @@ function LibraryPage({handleLogout}) {
             });
         });
 
-            setMessage("Libro eliminado de tu biblioteca.");
+            showMessage("Libro eliminado de tu biblioteca.", "success");
         } catch (error) {
             console.log(error);
 
             if (error.response?.status === 401) {
-                setMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.");
+                showMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.", "error");
                 handleLogout();
                 navigate("/login");
             } else {
-                setMessage("No se pudo eliminar el libro.");
+                showMessage("No se pudo eliminar el libro.", "error");
             }
         }
     };
@@ -297,10 +310,12 @@ function LibraryPage({handleLogout}) {
             handleLogout();
             navigate("/login");
             } else {
-            setMessage(
-                error.response?.data?.message ||
-                "No se pudo actualizar el favorito."
-            );
+            showMessage(
+                newFavoriteValue
+                    ? "Libro añadido a favoritos."
+                    : "Libro eliminado de favoritos.",
+                    "success"
+                );
             }
         }
     };
@@ -403,61 +418,65 @@ function LibraryPage({handleLogout}) {
     
     return (
         <div className="library-page-wrapper">
-        <div className="library-header">
-            <h1>Mi biblioteca</h1>
-        </div>
-   
-        {message && <p className="library-message">{message}</p>}
-        <LibraryStats 
-            stats={libraryStats}
-            ownershipFilter={ownershipFilter}
-            favoriteFilter={favoriteFilter}
-            onOwnershipFilterChange={setOwnershipFilter}
-            onFavoriteFilterChange={setFavoriteFilter} />
-        <LibraryFilters
-            searchFilter={searchFilter}
-            statusFilter={statusFilter}
-            formatFilter={formatFilter}
-            sortFilter={sortFilter}
-            onSearchChange={setSearchFilter}
-            onStatusChange={setStatusFilter}
-            onFormatChange={setFormatFilter}
-            onSortChange={setSortFilter}
-            onClearFilters={handleClearFilters}
+             <AppToast
+            message={message}
+            type={messageType}
+            onClose={() => setMessage("")}
         />
-        <div className="library-results-summary">
-            <p>
-                Mostrando <strong>{sortedBooks.length}</strong> de{" "}
-                <strong>{libraryBooks.length}</strong> libros · Vista:{" "}
-                <strong>{getActiveLibraryViewLabel()}</strong>
-            </p>
-        </div>
-        {isLoading ? (
-            <p>Cargando biblioteca...</p>
-        ) : (
+            <div className="library-header">
+                <h1>Mi biblioteca</h1>
+            </div>
+   
+            {message && <p className="library-message">{message}</p>}
+            <LibraryStats 
+                stats={libraryStats}
+                ownershipFilter={ownershipFilter}
+                favoriteFilter={favoriteFilter}
+                onOwnershipFilterChange={setOwnershipFilter}
+                onFavoriteFilterChange={setFavoriteFilter} />
+            <LibraryFilters
+                searchFilter={searchFilter}
+                statusFilter={statusFilter}
+                formatFilter={formatFilter}
+                sortFilter={sortFilter}
+                onSearchChange={setSearchFilter}
+                onStatusChange={setStatusFilter}
+                onFormatChange={setFormatFilter}
+                onSortChange={setSortFilter}
+                onClearFilters={handleClearFilters}
+            />
+            <div className="library-results-summary">
+                <p>
+                    Mostrando <strong>{sortedBooks.length}</strong> de{" "}
+                    <strong>{libraryBooks.length}</strong> libros · Vista:{" "}
+                    <strong>{getActiveLibraryViewLabel()}</strong>
+                </p>
+            </div>
+        {isLoading 
+        ? (<p>Cargando biblioteca...</p>) 
+        : (
             <div className="library-books-grid">
-            {libraryBooks.length === 0 ? (
-                <p>Todavía no tienes libros guardados.</p>
-            ): sortedBooks.length > 0 ?(
-                sortedBooks.map((book) => {
-                    const isEditing = editingLibraryId === book.library_id;
-                    return (
-                        <LibraryBookCard
-                            key={book.library_id}
-                            book={book}
-                            isEditing={isEditing}
-                            onEdit={handleStartEdit}
-                            onDelete={handleDeleteBook}
-                            onToggleFavorite={handleToggleFavorite}
-                            formatDateForInput={formatDateForInput}
-                        />
-                        
-                    );
-                })
-                        
-            ) : (
-                <p>No hay libros que coincidan con los filtros.</p>
-            )}
+            {libraryBooks.length === 0 
+            ? (<p>Todavía no tienes libros guardados.</p>)
+            : sortedBooks.length > 0 
+                ?   (
+                    sortedBooks.map((book) => {
+                        const isEditing = editingLibraryId === book.library_id;
+                        return (
+                            <LibraryBookCard
+                                key={book.library_id}
+                                book={book}
+                                isEditing={isEditing}
+                                onEdit={handleStartEdit}
+                                onDelete={handleDeleteBook}
+                                onToggleFavorite={handleToggleFavorite}
+                                formatDateForInput={formatDateForInput}
+                            />
+                            
+                        );
+                    })
+                ) 
+                : ( <p>No hay libros que coincidan con los filtros.</p>)}
             </div>
         )}
         <LibraryBookEditModal
