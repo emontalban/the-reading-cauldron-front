@@ -69,6 +69,11 @@
     .book-actions {
         margin-top: 16px;
 
+        .book-card-actions{
+            display: flex;
+            gap: 10px;
+        }
+
         .save-book-button {
             cursor: pointer;
             padding: 8px 14px;

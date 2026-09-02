@@ -9,7 +9,7 @@ import HomePage from "./pages/HomePage"
 import SearchBooksPage from "./pages/SearchBooksPage";
 import LibraryPage from "./pages/LibraryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import BookDetailPage from "./pages/BookDetailPage";
 
 import NoFoundPage from "./pages/NoFoundPage"
 
@@ -75,7 +75,12 @@ function App(){
                 />
             
             <Routes>
-                <Route path="/" element={<HomePage />}></Route>
+                <Route path="/" element={
+                    <HomePage 
+                        isAuthenticated={isAuthenticated} 
+                        handleLogout={handleLogout} 
+                    />}
+                />
                 <Route path="/login" element={<LoginPage handleSuccessfulLogin={handleSuccessfulLogin}/>}/>
                 <Route path="/register" element={<RegisterPage />} />
                 
@@ -90,6 +95,15 @@ function App(){
                         </ProtectedRoute>
                     }
                     />
+                <Route
+                    path="/book-detail/works/:workId"
+                    element={
+                        <BookDetailPage
+                            isAuthenticated={isAuthenticated}
+                            handleLogout={handleLogout}
+                        />
+                    }
+                />
                 
                 <Route path="*" element={<NoFoundPage/>}/>
             </Routes>
