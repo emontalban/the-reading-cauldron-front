@@ -415,6 +415,9 @@ function LibraryPage({handleLogout}) {
 
         return "Todos";
     };
+    const handleViewDetail = (libraryId) => {
+        navigate(`/library/${libraryId}`);
+    };
     
     return (
         <div className="library-page-wrapper">
@@ -470,6 +473,7 @@ function LibraryPage({handleLogout}) {
                                 onEdit={handleStartEdit}
                                 onDelete={handleDeleteBook}
                                 onToggleFavorite={handleToggleFavorite}
+                                onViewDetail={handleViewDetail}
                                 formatDateForInput={formatDateForInput}
                             />
                             

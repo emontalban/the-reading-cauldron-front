@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage"
 import SearchBooksPage from "./pages/SearchBooksPage";
 import LibraryPage from "./pages/LibraryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LibraryBookDetailPage from "./pages/LibraryBookDetailPage"
 import NoFoundPage from "./pages/NoFoundPage"
 
 
@@ -50,6 +51,14 @@ function App(){
                         </ProtectedRoute>
                     }
                     />
+                <Route
+                    path="/library/:libraryId"
+                    element={
+                        <ProtectedRoute isAuthenticated={isAuthenticated}>
+                            <LibraryBookDetailPage handleLogout={handleLogout} />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route path="*" element={<NoFoundPage/>}/>
             </Routes>
             

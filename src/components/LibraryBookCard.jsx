@@ -7,6 +7,7 @@ function LibraryBookCard({
     onEdit,
     onDelete,
     onToggleFavorite,
+    onViewDetail,
     formatDateForInput,
 }) {
     const statusLabels = {
@@ -147,9 +148,19 @@ function LibraryBookCard({
                     <p>{book.library_notes}</p>
                 </div>
                 )}
+
+                
             
 
-                <div className="library-book-actions">     
+                <div className="library-book-actions">
+                    <button
+                        className="view-library-book-button"
+                        type="button"
+                        onClick={() => onViewDetail(book.library_id)}
+                    >
+                        Ver detalle
+                    </button>
+
                     {!isEditing && (
                     <button
                         className="edit-library-book-button"
