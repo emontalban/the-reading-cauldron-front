@@ -20,6 +20,7 @@
             width: auto;
             display: block;
         }
+        
     }
     .navigation-links {
         display: flex;
@@ -33,6 +34,20 @@
 
             &:hover {
                 color: $gold-hover;
+            }
+        }
+        .navbar-user-info {
+
+            color: $gold;
+        
+
+            svg {
+                color: $gold;
+                font-size: 1rem;
+            }
+
+            span {
+                color: $gold;
             }
         }
 

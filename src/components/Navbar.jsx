@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 import navImg from "../assets/images/logo-nav.png";
 
-function NavBar({ isAuthenticated, handleLogout }) {
+function NavBar({ isAuthenticated, handleLogout, currentUser }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
@@ -49,6 +51,16 @@ function NavBar({ isAuthenticated, handleLogout }) {
         {isAuthenticated ? (
           <>
             <Link to="/library">Mi biblioteca</Link>
+
+            <div className="navbar-user-info">
+                <FontAwesomeIcon icon={faUser} />
+
+                <span>
+                    {currentUser?.user_name ||
+                        currentUser?.user_email ||
+                        "Usuario"}
+                </span>
+            </div>
 
             <button className="logout-button" type="button" onClick={logout}>
               Cerrar sesión
