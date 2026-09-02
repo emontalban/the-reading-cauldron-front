@@ -5,15 +5,17 @@ import axios from "axios";
 import api from "../api/axiosConfig"
 import BookCard from "../components/BookCard";
 import AppToast from "../components/AppToast";
-import { DiEnvato } from "react-icons/di";
+
 
 function SearchBooksPage({isAuthenticated, handleLogout}) {
   const [books, setBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("info");
+  const [savingBookKey, setSavingBookKey] = useState(null);
 
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   
 
   const query = searchParams.get("q") || "";
@@ -29,6 +31,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
         try {
             setIsLoading(true);
             setMessage("");
+            
 
             const response = await axios.get(
                 "https://openlibrary.org/search.json",
@@ -62,6 +65,8 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
             showMessage("No se pudo conectar con Open Library.");
         } finally {
             setIsLoading(false);
+            
+
         }
     };
 
@@ -122,6 +127,8 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
         console.log("Payload enviado a /books:", bookPayload);
 
         try {
+            setSavingBookKey(book.key);
+
             const bookResponse = await api.post("/books", bookPayload);
              console.log("Respuesta de /books:", bookResponse.data);
             const bookId = bookResponse.data.book_id;
@@ -150,19 +157,23 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
         } catch (error) {
             console.log(error);
             console.log("Respuesta backend:", error.response?.data);
-            if (error.response?.status === 401){
-                showMessage("Tu sesion ha caducado.Vuelve a iniciar Sesion.");
-                handleLogout();
-                navigate("/login")
+                if (error.response?.status === 401){
+                    showMessage("Tu sesion ha caducado.Vuelve a iniciar Sesion.");
+                    handleLogout();
+                    navigate("/login");
+                    return;
+                }
+                if (error.response?.status === 409) {
+                    showMessage(error.response?.data?.message ||"Este libro ya existe o ya está guardado.", "error");
+                    return;
+                } 
+                showMessage(error.response.data.message || "No se pudo guardar el libro.",  "error");
             }
-            else if (error.response?.status === 409) {
-                showMessage("Este libro ya existe o ya está guardado.");
-            } else if (error.response?.data?.message) {
-                showMessage(error.response.data.message);
-            } else {
-                showMessage("No se pudo guardar el libro.");
-            }
+        finally{
+            setSavingBookKey(null);
+
         }
+        
     };
     const showMessage = (text, type = "info") => {
         setMessage(text);
@@ -190,7 +201,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
                 </p>
                 )}
 
-                {message && <p className="search-message">{message}</p>}
+               
             </div>
 
             {isLoading ? (

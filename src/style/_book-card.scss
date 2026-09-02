@@ -84,7 +84,18 @@
                 background-color: $gold-hover;
                 border-color: $gold-hover;
             }
+            &:disabled {
+                opacity: 0.65;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            &:disabled:hover {
+                background-color: $gold;
+                transform: none;
+            }
         }
+       
     }
 }
 
