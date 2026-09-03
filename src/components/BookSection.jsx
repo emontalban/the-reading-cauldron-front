@@ -54,7 +54,7 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
     };
 
     getBooks();
-  }, [query, sort]);
+  }, [query, sort,showMessage]);
 
   const getBookDescription = async (bookKey) => {
         if (!bookKey) {

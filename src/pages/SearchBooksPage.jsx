@@ -22,9 +22,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
 
   useEffect(() => {
     if (!query) {
-      setBooks([]);
-      showMessage("Busca un libro desde el buscador de la barra superior.");
-      return;
+        return;
     }
 
     const getBooks = async () => {
@@ -32,7 +30,6 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
             setIsLoading(true);
             setMessage("");
             
-
             const response = await axios.get(
                 "https://openlibrary.org/search.json",
                 {
@@ -58,15 +55,12 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
                 setMessage("No se encontraron libros.");
             }
             
-        } catch (error) {
-            console.log(error);
-
-        setBooks([]);
-            showMessage("No se pudo conectar con Open Library.");
+        } catch {
+            setBooks([]);
+            setMessage("No se pudo conectar con Open Library.");
+            setMessageType("error")
         } finally {
             setIsLoading(false);
-            
-
         }
     };
 
@@ -212,7 +206,9 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
                
             </div>
 
-            {isLoading ? (
+            {!query ? (
+                <p>Busca un libro desde el buscador en la barra superior.</p>
+            ):isLoading ? (
                 <p>Cargando libros...</p>
             ) : (
                 <div className="search-books-grid">

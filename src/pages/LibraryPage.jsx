@@ -109,7 +109,7 @@ function LibraryPage({handleLogout}) {
         };
 
         getLibraryBooks();
-    }, [navigate]);
+    }, [navigate, handleLogout]);
 
 
 

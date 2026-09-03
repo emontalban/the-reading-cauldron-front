@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState,useCallback } from "react"
 import { BrowserRouter, Route, Routes } from "react-router"
 
 import api from "./api/axiosConfig"
@@ -23,11 +23,13 @@ function App(){
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
+        if (!isAuthenticated) {
+            return;
+        }
         const getCurrentUser = async () => {
             const token = localStorage.getItem("token");
 
             if (!token) {
-                setCurrentUser(null);
                 return;
             }
 
@@ -47,23 +49,20 @@ function App(){
             }
         };
 
-        if (isAuthenticated) {
-            getCurrentUser();
-        } else {
-            setCurrentUser(null);
-        }
+        getCurrentUser();
+        
     }, [isAuthenticated]);
 
     const handleSuccessfulLogin = () => {
         setIsAuthenticated(true);
     };
 
-    const handleLogout = () => {
+    const handleLogout = useCallback(() => {
         localStorage.removeItem("token");
         setIsAuthenticated(false);
         setCurrentUser(null);
         
-    };
+    },[]);
     
     return(
         

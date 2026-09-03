@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import BookSection from "../components/BookSection";
 import AppToast from "../components/AppToast";
@@ -7,7 +7,7 @@ function HomePage({isAuthenticated, handleLogout}) {
     const[message, setMessage] = useState("");
     const[messageType, setMessageType] = useState("info");
 
-    const showMessage = (text, type = "info") => {
+    const showMessage = useCallback((text, type = "info") => {
         setMessage(text);
         setMessageType(type);
 
@@ -15,7 +15,7 @@ function HomePage({isAuthenticated, handleLogout}) {
             setMessage("");
             setMessageType("info");
         }, 3500);
-    };
+    },[]);
     const bookSections = [
         {
         title: "Libros nuevos",
