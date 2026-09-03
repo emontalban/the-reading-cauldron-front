@@ -31,6 +31,21 @@
                 margin-top: 0;
                 margin-bottom: 32px;
             }
+
+            .login-register-text {
+                margin: 0;
+                color: $text;
+                text-align: center;
+
+                a {
+                    color: $purple;
+                    font-weight: 700;
+
+                    &:hover {
+                        color: $purple-dark;
+                    }
+                }
+            }
         
 
             .login-form-wrapper {

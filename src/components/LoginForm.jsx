@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
 import api from "../api/axiosConfig";
@@ -78,8 +79,12 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
 
             <button className="btn" type="submit">Entrar</button>
           </form>
+          
 
           <p className="message">{message}</p>
+          <p className="login-register-text">
+            ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
+          </p>
 
         
       </div>
