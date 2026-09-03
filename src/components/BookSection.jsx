@@ -125,12 +125,8 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
                     : null,
             };
 
-            console.log("Payload enviado a /books:", bookPayload);
 
             const bookResponse = await api.post("/books", bookPayload);
-
-            console.log("Respuesta completa de /books:", bookResponse);
-            console.log("Datos de /books:", bookResponse.data);
 
             const bookId =
                 bookResponse.data.book_id ||
@@ -141,7 +137,6 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
                 return;
             }
 
-            console.log("book_id recibido:", bookId);
 
             const libraryResponse = await api.post(
                 "/library",
@@ -157,14 +152,12 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
                 }
         );
 
-        console.log("Respuesta completa de /library:", libraryResponse);
-        console.log("Datos de /library:", libraryResponse.data);
+       
 
         showMessage("Libro guardado en tu biblioteca.", "success");
     } catch (error) {
         console.log("Error al guardar desde Home:", error);
-        console.log("Status:", error.response?.status);
-        console.log("Respuesta backend:", error.response?.data);
+        
 
         if (error.response?.status === 401) {
             showMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.", "error");

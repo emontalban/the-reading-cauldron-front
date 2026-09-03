@@ -74,7 +74,6 @@ function LibraryBookCard({
                     }
                     type="button"
                     onClick={() =>{
-                        console.log("corazon pulsado", book.library_id); 
                         onToggleFavorite(book)}}
                     aria-label={
                         isFavorite

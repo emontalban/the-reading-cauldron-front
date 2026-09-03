@@ -82,8 +82,7 @@ function LibraryPage({handleLogout}) {
                 },
             });
 
-            console.log("Respuesta de /library:", response.data);
-
+           
             const booksData = Array.isArray(response.data)
                 ? response.data
                 : response.data.library || [];
@@ -160,8 +159,7 @@ function LibraryPage({handleLogout}) {
 
     const handleStartEdit = (book) => {
 
-        console.log("Editando libro:", book.library_id);
-
+        
         setEditingLibraryId(book.library_id);
         setModalMessage("");
 
@@ -252,8 +250,7 @@ function LibraryPage({handleLogout}) {
       
     } catch (error) {
         console.log(error);
-        console.log("Respuesta backend:", error.response?.data);
-
+        
         if (error.response?.status === 401) {
             setMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.");
             handleLogout();
@@ -274,7 +271,7 @@ function LibraryPage({handleLogout}) {
             return;
         }
 
-        const newFavoriteValue = !book.library_favorite;
+        const newFavoriteValue = !isFavoriteValue(book.library_favorite);
 
         const updatePayload = {
             library_status: book.library_status || "pendiente",
@@ -313,20 +310,19 @@ function LibraryPage({handleLogout}) {
                     return currentBook;
                 });
             });
-        } catch (error) {
-            console.log(error);
-            console.log("Respuesta backend:", error.response?.data);
-
-            if (error.response?.status === 401) {
-            handleLogout();
-            navigate("/login");
-            } else {
             showMessage(
                 newFavoriteValue
                     ? "Libro añadido a favoritos."
                     : "Libro eliminado de favoritos.",
                     "success"
                 );
+        } catch (error) {
+            
+            if (error.response?.status === 401) {
+                handleLogout();
+                navigate("/login");
+            } else {
+                showMessage("No se puedo actualizar favoritos","error");
             }
         }
     };

@@ -95,7 +95,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
     };
 
     const handleSaveBook = async (book)=>{
-        console.log("Entrando en handleSaveBook:", book);
+        
         if(!isAuthenticated){
             navigate("/login");
             return;
@@ -103,7 +103,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
 
         const token = localStorage.getItem("token");
         const bookDescription = await getBookDescription(book.key);
-        console.log("Descripción encontrada:", bookDescription);
+        
         const bookPayload = {
             book_title: book.title,
             book_author: book.author_name?.[0] || "Autor desconocido",
@@ -118,14 +118,12 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
      
         };
 
-        console.log("Payload enviado a /books:", bookPayload);
-
+        
         try {
             setSavingBookKey(book.key);
 
             const bookResponse = await api.post("/books", bookPayload);
-             console.log("Respuesta de /books:", bookResponse.data);
-            const bookId = bookResponse.data.book_id;
+                        const bookId = bookResponse.data.book_id;
             if (!bookId) {
                 setMessage("El libro se creó, pero no se recibió el book_id.");
                 return;
@@ -149,20 +147,19 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
 
 
         } catch (error) {
-            console.log(error);
-            console.log("Respuesta backend:", error.response?.data);
-                if (error.response?.status === 401){
-                    showMessage("Tu sesion ha caducado.Vuelve a iniciar Sesion.");
-                    handleLogout();
-                    navigate("/login");
-                    return;
-                }
-                if (error.response?.status === 409) {
-                    showMessage(error.response?.data?.message ||"Este libro ya existe o ya está guardado.", "error");
-                    return;
-                } 
-                showMessage(error.response.data.message || "No se pudo guardar el libro.",  "error");
+        
+            if (error.response?.status === 401){
+                showMessage("Tu sesion ha caducado.Vuelve a iniciar Sesion.");
+                handleLogout();
+                navigate("/login");
+                return;
             }
+            if (error.response?.status === 409) {
+                showMessage(error.response?.data?.message ||"Este libro ya existe o ya está guardado.", "error");
+                return;
+            } 
+            showMessage(error.response.data.message || "No se pudo guardar el libro.",  "error");
+        }
         finally{
             setSavingBookKey(null);
 
