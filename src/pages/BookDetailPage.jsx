@@ -81,14 +81,7 @@ function BookDetailPage() {
 
     return (
         <div className="book-detail-page-wrapper">
-            <button
-                className="back-library-button"
-                type="button"
-                onClick={() => navigate(-1)}
-            >
-                Volver
-            </button>
-
+            
             <div className="book-detail-card">
                 <div className="book-detail-cover">
                     {coverUrl ? (
@@ -148,6 +141,15 @@ function BookDetailPage() {
                         </div>
                     )}
                 </div>
+            </div>
+            <div className="book-detail-back-actions">
+                <button
+                    className="back-library-button"
+                    type="button"
+                    onClick={() => navigate(-1)}
+                >
+                    Volver
+                </button>
             </div>
         </div>
     );

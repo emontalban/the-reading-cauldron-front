@@ -5,7 +5,7 @@
     inset: 0;
     z-index: 9999;
 
-    background-color: rgba(23, 20, 31, 0.72);
+    background-color: rgba($text, 0.72);
 
     display: flex;
     align-items: center;
@@ -25,7 +25,7 @@
     border-radius: 16px;
     padding: 28px;
 
-    box-shadow: 0 18px 48px rgba(23, 20, 31, 0.35);
+    box-shadow: 0 18px 48px rgba($text, 0.35);
 }
 
 .library-modal-header {
@@ -89,13 +89,13 @@
     textarea {
         width: 100%;
 
-        border: 1px solid rgba(50, 3, 92, 0.25);
+        border: 1px solid rgba($purple-dark, 0.25);
         border-radius: 8px;
 
         padding: 10px 12px;
         box-sizing: border-box;
         min-width: 0;
-        background-color: white;
+        background-color: $input-background;
         color: $text;
 
         font-family: inherit;
@@ -104,7 +104,7 @@
         &:focus {
             outline: none;
             border-color: $purple;
-            box-shadow: 0 0 0 3px rgba(117, 21, 191, 0.12);
+            box-shadow: 0 0 0 3px rgba($purple, 0.12);
         }
     }
 

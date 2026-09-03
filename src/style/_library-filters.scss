@@ -10,12 +10,12 @@
     align-items: end;
 
     background-color: $card-background;
-    border: 1px solid rgba(50, 3, 92, 0.12);
+    border: 1px solid rgba($purple-dark, 0.12);
     border-radius: 14px;
 
     padding: 18px;
 
-    box-shadow: 0 6px 16px rgba(23, 20, 31, 0.06);
+    box-shadow: 0 6px 16px rgba($text, 0.06);
 
     label {
         display: flex;
@@ -48,7 +48,7 @@
         &:focus {
             outline: none;
             border-color: $purple;
-            box-shadow: 0 0 0 3px rgba(117, 21, 191, 0.12);
+            box-shadow: 0 0 0 3px rgba($purple, 0.12);
         }
     }
 }

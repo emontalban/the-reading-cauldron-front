@@ -33,10 +33,10 @@
         gap: 24px;
 
         background-color: $card-background;
-        border: 1px solid rgba(50, 3, 92, 0.12);
+        border: 1px solid rgba($purple-dark, 0.12);
         border-radius: 16px;
         padding: 22px;
-        box-shadow: 0 8px 20px rgba(23, 20, 31, 0.08);
+        box-shadow: 0 8px 20px rgba($text, 0.08);
     }
 
     .library-book-cover {
@@ -100,7 +100,7 @@
 
         border-radius: 999px;
 
-        background-color: rgba(117, 21, 191, 0.1);
+        background-color: rgba($purple, 0.1);
         color: $purple-dark;
 
         font-size: 0.85rem;
@@ -138,7 +138,7 @@
     }
 
     .library-star {
-        color: rgba(50, 3, 92, 0.2);
+        color: rgba($purple-dark, 0.2);
         font-size: 1rem;
     }
 
@@ -148,7 +148,7 @@
 
     .library-favorite-icon {
         flex-shrink: 0;
-        color: rgba(50, 3, 92, 0.25);
+        color: rgba($purple-dark, 0.25);
         font-size: 1.5rem;
         margin-top: 4px;
     }
@@ -157,7 +157,7 @@
         background: transparent;
         padding: 0;
 
-        color: rgba(50, 3, 92, 0.25);
+        color: rgba($purple-dark, 0.25);
 
         cursor: pointer;
         font-size: 1.5rem;
@@ -175,7 +175,7 @@
     }
 
     .library-favorite-button-active {
-        color: #c62828;
+        color:$favorite;
        
     }
 
@@ -186,7 +186,7 @@
         border-left: 4px solid $gold;
         border-radius: 10px;
 
-        background-color: rgba(201, 168, 106, 0.12);
+        background-color: rgba($gold, 0.12);
 
         span {
             display: block;
@@ -212,7 +212,7 @@
         margin-top: 18px;
         padding-top: 14px;
 
-        border-top: 1px solid rgba(50, 3, 92, 0.12);
+        border-top: 1px solid rgba($purple-dark, 0.12);
     }
     .edit-library-book-button,
     .delete-library-book-button {
@@ -232,7 +232,7 @@
         cursor: pointer;
         font-size: 1.15rem;
 
-        box-shadow: 0 4px 10px rgba(23, 20, 31, 0.14);
+        box-shadow: 0 4px 10px rgba($text, 0.14);
 
         transition:
             color 0.2s ease,
@@ -256,12 +256,12 @@
 
     .library-stat-card {
         background-color: $card-background;
-        border: 1px solid rgba(50, 3, 92, 0.12);
+        border: 1px solid rgba($purple-dark, 0.12);
         border-radius: 14px;
 
         padding: 18px 16px;
 
-        box-shadow: 0 6px 16px rgba(23, 20, 31, 0.06);
+        box-shadow: 0 6px 16px rgba($text, 0.06);
         
         display: flex;
         justify-content: space-between;
@@ -299,48 +299,61 @@
 
 
 @media (max-width: 768px) {
-    .library-page-wrapper{
+    .library-page-wrapper {
         padding: 28px;
-    }
-    .library-book-card {
-        grid-template-columns: 100px 1fr;
-        gap: 18px;
+
+        .library-book-card {
+            grid-template-columns: 100px minmax(0, 1fr);
+            gap: 18px;
+        }
+
+        .library-book-cover {
+            width: 100px;
+        }
+
+        .library-book-actions {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+
+        .library-book-properties {
+            grid-template-columns: 1fr;
+        }
+
+        .library-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
     }
 
-    .library-book-cover {
-        width: 100px;
-    }
 
-    .library-book-actions {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        justify-content: flex-end;
-    }
+    @media (max-width: 480px) {
+        .library-page-wrapper {
+            padding: 20px 16px;
 
-    .library-book-properties {
-        grid-template-columns: 1fr;
-    }
-     .library-stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
+            .library-book-card {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 16px;
+                padding: 16px;
+            }
 
-@media (max-width: 480px) {
-    .library-page-wrapper{
-        padding: 20px;
-    }
-    .library-book-card {
-        grid-template-columns: 1fr;
-    }
+            .library-book-cover {
+                width: 120px;
+                max-width: 100%;
+                justify-self: center;
+            }
 
-    .library-book-cover {
-        width: 120px;
-    }
+            .library-book-title-row {
+                align-items: flex-start;
+            }
 
-    .library-book-title-row {
-        align-items: flex-start;
-    }
-    .library-stats {
-        grid-template-columns: 1fr;
+            .library-book-properties {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .library-stats {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
     }
 }

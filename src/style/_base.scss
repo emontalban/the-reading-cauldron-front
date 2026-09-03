@@ -1,8 +1,25 @@
 @use "./variables" as *;
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    min-height: 100%;
+}
+
 body {
+    margin:0;
     margin: 0px;
     font-family: $font-body;
+}
+img{
+    max-width: 100%;
 }
 
 h1,

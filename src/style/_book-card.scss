@@ -4,9 +4,7 @@
     background-color :$card-background;
     border-radius: 12px;
     padding: 16px;
-    box-shadow: 0 8px 18px rgba(23, 20, 31, 0.08);
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+    box-shadow: 0 8px 18px rgba($text, 0.08);
     
 
     .book-cover {

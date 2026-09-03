@@ -2,7 +2,6 @@
 @use "./mixins" as *;
 @use "./base";
 @use "./login-form";
-@use "./login-page";
 @use "./navbar";
 @use "./not-found";
 @use "./book-card";
@@ -11,6 +10,7 @@
 @use "./library";
 @use "./library-modal";
 @use "./library-filters";
+@use "./book-details";
 @use "./app_toast";
 
 
