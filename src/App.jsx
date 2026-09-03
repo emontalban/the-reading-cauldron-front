@@ -41,8 +41,8 @@ function App(){
                 });
 
                 setCurrentUser(response.data.user || response.data);
-            } catch (error) {
-                console.log(error);
+            } catch {
+                
                 localStorage.removeItem("token");
                 setIsAuthenticated(false);
                 setCurrentUser(null);

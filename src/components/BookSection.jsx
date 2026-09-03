@@ -77,8 +77,8 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
             }
 
             return null;
-        } catch (error) {
-            console.log("No se pudo obtener la descripción:", error);
+        } catch {
+            
             return null;
         }
     };
@@ -138,7 +138,7 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
             }
 
 
-            const libraryResponse = await api.post(
+            await api.post(
                 "/library",
                 {
                     library_book_id: bookId,
@@ -152,13 +152,9 @@ function BookSection({ title, description, query, sort, isAuthenticated, handleL
                 }
         );
 
-       
-
         showMessage("Libro guardado en tu biblioteca.", "success");
-    } catch (error) {
-        console.log("Error al guardar desde Home:", error);
-        
-
+    } catch (error){
+            
         if (error.response?.status === 401) {
             showMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.", "error");
             handleLogout();

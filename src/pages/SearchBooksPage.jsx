@@ -88,8 +88,8 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
             }
 
             return null;
-        } catch (error) {
-            console.log("No se pudo obtener la descripción:", error);
+        } catch{
+           
             return null;
         }
     };
