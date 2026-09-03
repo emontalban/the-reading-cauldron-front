@@ -10,6 +10,7 @@ import SearchBooksPage from "./pages/SearchBooksPage";
 import LibraryPage from "./pages/LibraryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import BookDetailPage from "./pages/BookDetailPage";
+import Footer from "./components/Footer"
 
 import NoFoundPage from "./pages/NoFoundPage"
 
@@ -106,7 +107,7 @@ function App(){
                 
                 <Route path="*" element={<NoFoundPage/>}/>
             </Routes>
-            
+            <Footer/>
         </BrowserRouter>
     
     )
