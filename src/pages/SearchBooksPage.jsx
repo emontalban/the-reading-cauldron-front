@@ -185,6 +185,14 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
         }, 3500);
     };
 
+    const handleViewDetail = (book) => {
+        navigate(`/book-detail${book.key}`, {
+            state: {
+                book: book,
+            },
+        });
+    };
+
     return (
         <div className="search-books-page-wrapper">
             <AppToast
@@ -211,15 +219,26 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
                 {books.map((book) => {
                     return (
                     <BookCard key={book.key} book={book}>
-                        <button className="save-book-button"
-                            type="button"
-                            onClick={() => {
-                                console.log("Botón pulsado:", book.title);
-                                handleSaveBook(book);
-                            }}
+                        <div className="book-card-actions">
+                            <button
+                                className="book-detail-button"
+                                type="button"
+                                onClick={() => handleViewDetail(book)}
                             >
-                            Guardar en mi biblioteca
-                        </button>
+                                Ver detalles
+                            </button>
+                            <button className="save-book-button"
+                                type="button"
+                                disabled={savingBookKey === book.key}
+                                onClick={() => {
+                                    handleSaveBook(book);
+                                }}
+                            >
+                                {savingBookKey === book.key
+                                    ? "Guardando..."
+                                    : "Guardar"}
+                            </button>
+                            </div>
                     </BookCard>
                     );
                 })}
