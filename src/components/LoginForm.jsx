@@ -10,7 +10,7 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
     });
 
     const [message, setMessage] = useState("");
-    const [token, setToken] = useState("");
+    
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -81,11 +81,6 @@ function LoginForm({handleSuccessFulAuth, handleUnsuccessFulAuth}) {
 
           <p className="message">{message}</p>
 
-          {token && (
-            <div className="token-box">
-              <strong>Token guardado correctamente</strong>
-            </div>
-          )}
         
       </div>
     );

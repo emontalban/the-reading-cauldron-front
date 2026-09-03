@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { BrowserRouter, Route, Routes, Link } from "react-router"
+import { BrowserRouter, Route, Routes } from "react-router"
 
 import api from "./api/axiosConfig"
 import NavBar from "./components/NavBar"
