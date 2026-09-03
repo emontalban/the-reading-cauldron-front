@@ -25,6 +25,7 @@ function LibraryPage({handleLogout}) {
     const [sortFilter, setSortFilter] = useState("fecha_desc");
     
     const [messageType, setMessageType] = useState("info");
+    const [bookPendingDelete, setBookPendingDelete] = useState(null);
     const navigate = useNavigate();
 
     const isFavoriteValue = (value) => {
@@ -111,12 +112,20 @@ function LibraryPage({handleLogout}) {
         getLibraryBooks();
     }, [navigate, handleLogout]);
 
+    const handleDeleteBook = (book) => {
+        setBookPendingDelete(book);
+    };
 
-
-    const handleDeleteBook = async(libraryId) =>{
+    const handleConfirmDelete = async() =>{
+        
+        if(!bookPendingDelete){
+            return;
+        }
+        const libraryId = bookPendingDelete.library_id;
         const token = localStorage.getItem("token");
 
         if(!token){
+            setBookPendingDelete(null);
             navigate("/login");
             return;
         }
@@ -134,11 +143,13 @@ function LibraryPage({handleLogout}) {
         });
 
             showMessage("Libro eliminado de tu biblioteca.", "success");
+            setBookPendingDelete(null);
         } catch (error) {
             console.log(error);
 
             if (error.response?.status === 401) {
                 showMessage("Tu sesión ha caducado. Vuelve a iniciar sesión.", "error");
+                setBookPendingDelete(null);
                 handleLogout();
                 navigate("/login");
             } else {
@@ -481,6 +492,38 @@ function LibraryPage({handleLogout}) {
                     })
                 ) 
                 : ( <p>No hay libros que coincidan con los filtros.</p>)}
+            </div>
+        )}
+        {bookPendingDelete && (
+            <div className="delete-confirmation-overlay">
+                <div
+                    className="delete-confirmation-modal"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="delete-confirmation-title"
+                >
+                    <h2 id="delete-confirmation-title">Eliminar libro</h2>
+                    <p>
+                        ¿Quieres eliminar <strong>{bookPendingDelete.book_title}</strong> de tu biblioteca?
+                    </p>
+
+                    <div className="delete-confirmation-actions">
+                        <button
+                            className="cancel-delete-button"
+                            type="button"
+                            onClick={() => setBookPendingDelete(null)}
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            className="confirm-delete-button"
+                            type="button"
+                            onClick={handleConfirmDelete}
+                        >
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
             </div>
         )}
         <LibraryBookEditModal

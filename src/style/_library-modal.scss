@@ -183,6 +183,61 @@
         color: $gold-hover;
     }
 }
+.delete-confirmation-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba($text, 0.72);
+}
+
+.delete-confirmation-modal {
+    width: 100%;
+    max-width: 430px;
+    padding: 24px;
+    border-radius: 14px;
+    background-color: $background;
+    color: $text;
+    text-align: center;
+
+    h2 {
+        margin: 0 0 12px;
+        color: $purple-dark;
+    }
+
+    p {
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+.delete-confirmation-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-delete-button,
+.confirm-delete-button {
+    width: auto;
+    min-width: 110px;
+    padding: 10px 16px;
+    border: 1px solid $gold;
+    border-radius: 8px;
+    background-color: $purple-dark;
+    color: $gold;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+
+    &:hover {
+        color: $gold-hover;
+    }
+}
 
 @media (max-width: 768px) {
     .library-edit-fields {
@@ -206,5 +261,14 @@
 
     .library-modal-content {
         padding: 20px;
+    }
+
+    .delete-confirmation-actions {
+        flex-direction: column;
+    }
+
+    .cancel-delete-button,
+    .confirm-delete-button {
+        width: 100%;
     }
 }

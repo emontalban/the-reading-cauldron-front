@@ -149,8 +149,6 @@ function LibraryBookCard({
                 )}
 
                 
-            
-
                 <div className="library-book-actions">
                    
 
@@ -169,7 +167,7 @@ function LibraryBookCard({
                 <button
                     className="delete-library-book-button"
                     type="button"
-                    onClick={() => onDelete(book.library_id)}
+                    onClick={() => onDelete(book)}
                     aria-label={`Eliminar ${book.book_title} de mi biblioteca`}
                     title="Eliminar de mi biblioteca"
                 >
