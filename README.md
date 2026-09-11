@@ -134,38 +134,33 @@ the-reading-cauldron-frontend/
 
 ## Instalación
 
-Clonar el repositorio:
+- Clonar el repositorio
 
-```bash
-git clone URL_DEL_REPOSITORIO_FRONTEND
-cd the-reading-cauldron-frontend
-```
+- Instalar dependencias:
 
-Instalar dependencias:
+    ```bash
+    npm install
+    ```
 
-```bash
-npm install
-```
+    Crear un archivo `.env` a partir de `.env.example`.
 
-Crear un archivo `.env` a partir de `.env.example`.
+    Ejemplo:
 
-Ejemplo:
+    ```env
+    VITE_API_URL=http://localhost:5000
+    ```
 
-```env
-VITE_API_URL=http://localhost:5000
-```
+- Arrancar el proyecto:
 
-Arrancar el proyecto:
+    ```bash
+    npm run dev
+    ```
 
-```bash
-npm run dev
-```
+    Por defecto, el frontend se ejecuta en:
 
-Por defecto, el frontend se ejecuta en:
-
-```txt
-http://localhost:5173
-```
+    ```txt
+    http://localhost:5173
+    ```
 
 ## Flujo principal de uso
 
@@ -262,8 +257,8 @@ https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg
 
 La letra final indica el tamaño de la portada:
 
-S → pequeña
-M → mediana
+S → pequeña  
+M → mediana  
 L → grande
 
 
