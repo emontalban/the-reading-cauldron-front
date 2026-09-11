@@ -8,61 +8,61 @@ import AppToast from "../components/AppToast";
 
 
 function SearchBooksPage({isAuthenticated, handleLogout}) {
-  const [books, setBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("info");
-  const [savingBookKey, setSavingBookKey] = useState(null);
+    const [books, setBooks] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("info");
+    const [savingBookKey, setSavingBookKey] = useState(null);
 
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    
 
-  const query = searchParams.get("q") || "";
+    const query = searchParams.get("q") || "";
 
-  useEffect(() => {
-    if (!query) {
-        return;
-    }
-
-    const getBooks = async () => {
-        try {
-            setIsLoading(true);
-            setMessage("");
-            
-            const response = await axios.get(
-                "https://openlibrary.org/search.json",
-                {
-                    params: {
-                    q: query,
-                    limit: 24,
-                    fields:  "key,title,author_name,cover_i,first_publish_year,language,subject,isbn,publisher,number_of_pages_median,first_sentence"
-                    },
-                }
-            );
-
-            const booksData = Array.isArray(response.data.docs)
-                ? response.data.docs
-                : [];
-
-            const cleanBooks = booksData.filter((book) => {
-                return book.title;
-            });
-
-            setBooks(cleanBooks);
-
-            if (cleanBooks.length === 0) {
-                setMessage("No se encontraron libros.");
-            }
-            
-        } catch {
-            setBooks([]);
-            setMessage("No se pudo conectar con Open Library.");
-            setMessageType("error")
-        } finally {
-            setIsLoading(false);
+    useEffect(() => {
+        if (!query) {
+            return;
         }
-    };
+
+        const getBooks = async () => {
+            try {
+                setIsLoading(true);
+                setMessage("");
+                
+                const response = await axios.get(
+                    "https://openlibrary.org/search.json",
+                    {
+                        params: {
+                        q: query,
+                        limit: 24,
+                        fields:  "key,title,author_name,cover_i,first_publish_year,language,subject,isbn,publisher,number_of_pages_median,first_sentence"
+                        },
+                    }
+                );
+
+                const booksData = Array.isArray(response.data.docs)
+                    ? response.data.docs
+                    : [];
+
+                const cleanBooks = booksData.filter((book) => {
+                    return book.title;
+                });
+
+                setBooks(cleanBooks);
+
+                if (cleanBooks.length === 0) {
+                    setMessage("No se encontraron libros.");
+                }
+                
+            } catch {
+                setBooks([]);
+                setMessage("No se pudo conectar con Open Library.");
+                setMessageType("error")
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
         getBooks();
     }, [query]);
@@ -204,7 +204,7 @@ function SearchBooksPage({isAuthenticated, handleLogout}) {
             </div>
 
             {!query ? (
-                <p>Busca un libro desde el buscador en la barra superior.</p>
+                <p>Busca un libro en la barra superior.</p>
             ):isLoading ? (
                 <p>Cargando libros...</p>
             ) : (
